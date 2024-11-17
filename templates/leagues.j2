@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Fantasy Football Manager</title>
+      <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+      <link rel="stylesheet" href="styles.css">
+      <meta>
+   </head>
+   <body>
+      <header>
+         <h1>Fantasy Football Manager</h1>
+      </header>
+      <nav>
+         <a href="index.html">Home</a>
+         <a href="players.html">Players</a>
+         <a href="teams.html">Teams</a>
+         <a href="team_owners.html">Team Owners</a>
+         <a href="leagues.html">Leagues</a>
+         <a href="matches.html">Matches</a>
+         <a href="team_rosters.html">Players in Teams</a>
+      </nav>
+      <main>
+        
+       <h2> Add a League</h2>
+       <div class="formstyle1">
+       <form>
+
+      <label for="leaguename"><h3>League Name:</h3></label>
+      <input type="text" id="'leaguename" name="leaguename">
+      <br>
+      <br>
+      <br>
+      <h3>Is the league active?</h3>
+
+      <input type="radio" id="yes" name="active" value ="1">
+      <label for="yes">Yes</label><br>
+      <input type="radio" id="no"  name="active" value ="0">
+      <label for="no">No</label><br>
+      <br>
+      <input type="submit" value="Submit" />
+        </form>
+      </div>
+
+<h2>Update League Information:</h2>
+<div class="formstyle1">
+<form>
+
+    <label for="leagueid"><h3>League ID:</h3></label>
+    <input type="text" id="leagueid" name="leagueid">
+   <label for="leaguename"><h3>League Name:</h3></label>
+   <input type="text" id="'leaguename" name="leaguename">
+   <br>
+   <br>
+   <br>
+   <h3>Is the league active?</h3>
+
+   <input type="radio" id="yes" name="active" value ="1">
+   <label for="yes">Yes</label><br>
+   <input type="radio" id="no"  name="active" value ="0">
+   <label for="no">No</label><br>
+   <br>
+   <input type="submit" value="Submit" />
+     </form>
+
+   </div>
+
+   <h2>League Info</h2>
+
+   <div>
+      <table>
+         <tr>
+            <th>League Id</th>
+            <th>League Name</th>
+            <th>League Active?</th>
+            <th>Delete</th>
+         </tr>
+      <tr>
+      <td>1</td>
+      <td>2024 League</td>
+      <td>Yes</td>
+      <td><button>Delete Entry</button></td>
+
+
+
+      </tr>
+      <tr>
+         <td>2</td>
+         <td>2023 League</td>
+         <td>No</td>
+         <td><button>Delete Entry</button></td>
+   
+   
+   
+         </tr>
+      </table>
+
+   </div>
+
+
+
+
+
+      </main>
+      <footer>
+         <p>&copy; 2024 </p>
+      </footer>
+   </body>
+
+   <style>
+      nav {
+      text-align: center;
+      display: flex;
+      margin: 5px auto;
+      justify-content: center;
+      flex-wrap: wrap;
+      }
+
+
+
+      nav a {
+         border-radius: 5px;
+         color: var(--foggyGray);
+         font-size: 1.1em;
+         font-weight: bold;
+         margin-right: 20px;
+         padding: 5px 20px;
+         text-decoration: none;
+      }
+
+      h1 {
+         text-align: center;
+         font-weight: 700;
+      }
+      h2 {
+         text-align: center;
+
+      }
+
+      nav a:hover {
+         color: navy
+      }
+
+      footer {
+         line-height: 5px;
+         font-size: larger;
+         text-align: center;
+         padding: 5px;
+         margin: 0 auto;
+      }
+      table {
+width: 100%;
+border: 2px solid;
+
+      }
+
+      th {
+
+         height: 70px;
+         text-align: center;
+         border: 2px solid black;
+      }
+
+      td{
+
+         text-align: center;
+         border: 1px solid;
+      }
+      .formstyle1 {
+         width: 200px;
+         margin: 0 auto;
+         border-radius: 5px;
+         padding: 10px 20px;
+         display: flex;         
+         justify-content: center;
+         align-items: center;
+         border: 2px solid black;
+      }
+
+   </style>
+</html>

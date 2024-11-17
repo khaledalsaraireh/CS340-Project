@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Fantasy Football Manager</title>
+      <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+      <link rel="stylesheet" href="styles.css">
+      <meta>
+   </head>
+   <body>
+      <header>
+         <h1>Fantasy Football Manager</h1>
+      </header>
+      <nav>
+         <a href="index.html">Home</a>
+         <a href="players.html">Players</a>
+         <a href="teams.html">Teams</a>
+         <a href="team_owners.html">Team Owners</a>
+         <a href="leagues.html">Leagues</a>
+         <a href="matches.html">Matches</a>
+         <a href="team_rosters.html">Players in Teams</a>
+      </nav>
+      <main>
+
+
+        <h2> Enter a Match Record:</h2>
+
+
+        <div class="formstyle1">
+            <form>
+                <label for="week">Week Played:</label>
+                <input type="text" id="week" name="week"><br>
+                <label for="hometeamscore">Home Team Score:</label>
+                <input type="text" id="hometeamscore" name="hometeamscore"><br>
+                <label for="awayteamscore">Away Team Score:</label>
+                <input type="text" id="awayteamscore" name="awayteamscore"><br>
+                <label for="homeid">Home Team ID:</label>
+                <input type="text" id="homeid" name="homeid"><br>
+                <label for="awayid">Away Team ID:</label>
+                <input type="text" id="awayid" name="awayid"><br>
+                <input type="submit" value="Submit Record" />
+
+
+
+
+
+
+
+
+            </form>
+
+        </div>
+
+
+          
+
+
+
+
+            <h2> Update a Match Record:</h2>
+
+            <div class="formstyle1">
+                <form>
+                    <label for="matchid">Match ID:</label>
+                    <input type="text" id="matchid" name="matchid"><br>
+                    <label for="week">Week Played:</label>
+                    <input type="text" id="week" name="week"><br>
+                    <label for="hometeamscore">Home Team Score:</label>
+                    <input type="text" id="hometeamscore" name="hometeamscore"><br>
+                    <label for="awayteamscore">Away Team Score:</label>
+                    <input type="text" id="awayteamscore" name="awayteamscore"><br>
+                    <label for="homeid">Home Team ID:</label>
+                    <input type="text" id="homeid" name="homeid"><br>
+                    <label for="awayid">Away Team ID:</label>
+                    <input type="text" id="awayid" name="awayid"><br>
+                    <input type="submit" value="Update Record" />
+    
+    
+    
+    
+    
+    
+    
+    
+                </form>
+         
+
+
+
+        </div>
+
+<h2> Match Records:</h2>
+        <div class="tablestyle1">
+
+            <table>
+                <tr>
+                <th>Match ID</th>
+                <th>Week Played</th>
+                <th>Home Team Score</th>
+                <th>Away Team Score</th>
+                <th>Home Team ID</th>
+                <th>Away Team ID</th>
+                <th>Delete</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>3</td>
+                    <td>14</td>
+                    <td>7</td>
+                    <td>100</td>
+                    <td>95</td>
+                    <td><button>Delete Record</button></td>
+
+
+                </tr>
+                
+            </table>
+
+
+
+
+        </div>
+      </main>
+      <footer>
+         <p>&copy; 2024 </p>
+      </footer>
+   </body>
+
+   <style>
+      nav {
+      text-align: center;
+      display: flex;
+      margin: 5px auto;
+      justify-content: center;
+      flex-wrap: wrap;
+      }
+
+      nav a {
+         border-radius: 5px;
+         color: var(--foggyGray);
+         font-size: 1.1em;
+         font-weight: bold;
+         margin-right: 20px;
+         padding: 5px 20px;
+         text-decoration: none;
+      }
+
+      h1 {
+         text-align: center;
+         font-weight: 700;
+      }
+      h2
+      {
+        text-align: center;
+        
+      }
+
+      nav a:hover {
+         color: navy
+      }
+
+      footer {
+         line-height: 5px;
+         font-size: larger;
+         text-align: center;
+         padding: 5px;
+         margin: 0 auto;
+      }
+
+      .formstyle1
+      {
+        width: 500px;
+        clear: both;
+        margin: auto;
+        padding: 10px 10px;
+        border: 2px black solid;
+        
+      }
+       .formstyle1 input {
+        width: 100%;
+        clear: both;
+      
+       }
+       .tablestyle1 table
+       {
+        width: 100%;
+        border: 2px solid;
+       }
+       .tablestyle1 th
+       {
+        height: 70px;
+         text-align: center;
+         border: 2px solid black;
+       }
+       .tablestyle1 td
+       {
+        text-align: center;
+         border: 1px solid;
+       }
+       
+   </style>
+</html>

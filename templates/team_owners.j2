@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Fantasy Football Manager</title>
+      <link rel="stylesheet" href="styles.css">
+      <meta>
+   </head>
+   <body>
+      <header>
+         <h1>Fantasy Football Manager</h1>
+      </header>
+      <nav>
+         <a href="index.html">Home</a>
+         <a href="players.html">Players</a>
+         <a href="teams.html">Teams</a>
+         <a href="team_owners.html">Team Owners</a>
+         <a href="leagues.html">Leagues</a>
+         <a href="matches.html">Matches</a>
+         <a href="team_rosters.html">Players in Teams</a>
+      </nav>
+      <main>
+         <section>
+            <h2>Add Team Owner</h2>
+                <form action="" method="POST">
+                     <fieldset>
+                        <legend>Team Owner Info</legend>
+                        <label for="name">User Name</label>
+                        <input type="text" name="userName" id="userName" placeholder="User Name" required>
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" placeholder="Email" required>
+                        <label for="dateOfBirth">Date of Birth</label>
+                        <input type="date" name="dateOfBirth" id="dateOfBirth">
+                     </fieldset>
+                  <button>Add Team Owner</button>
+                </form>
+        </section>
+        <section>
+         <h2>Update Team Owner</h2>
+         <form action="" method="POST">
+               <fieldset>
+                  <legend>Team Owner Info</legend>
+                  <label for="teamOwnerID">Team Owner ID</label>
+                  <input type="number" name="teamOwnerID" id="teamOwnerID" placeholder="Team Owner ID" required>
+                  <label for="name">User Name</label>
+                  <input type="text" name="userName" id="userName" placeholder="User Name" required>
+                  <label for="email">Email</label>
+                  <input type="email" name="email" id="email" placeholder="Email" required>
+                  <label for="dateOfBirth">Date of Birth</label>
+                  <input type="date" name="dateOfBirth" id="dateOfBirth">
+               </fieldset>
+            <button>Submit Update</button>
+          </form>
+        </section>
+        <section>
+         <h1>Team Owners Data</h1>
+         <table>
+            <thead>
+               <th>Team Owner ID</th>
+               <th>User Name</th>
+               <th>Email</th>
+               <th>Date Of Birth</th>
+               <th>Delete</th>
+            </thead>
+            <tr>
+               <th>1</th>
+               <td>John</td>
+               <td>john@john.com</td>
+               <td>NULL</td>
+               <td><a href="#">Delete</a></td>
+            </tr>
+            <tr>
+               <th>2</th>
+               <td>ZiggyCat</td>
+               <td>Catnip423@gmail.com</td>
+               <td>2020-10-14</td>
+               <td><a href="#">Delete</a></td>
+           </tr>
+           <tr>
+               <th>3</th>
+               <td>User 3</td>
+               <td>email@aol.com</td>
+               <td>1993-3-30</td>
+               <td><a href="#">Delete</a></td>
+            </tr>
+        </table> 
+      </section>
+   </main>
+   <footer>
+      <p>&copy; 2024 </p>
+   </footer>
+   </body>
+</html>
