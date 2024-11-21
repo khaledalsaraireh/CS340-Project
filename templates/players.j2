@@ -156,7 +156,7 @@
                {% for key in player.keys() %}
                <td> {{player[key]}}</td> <!-- Add attribute to column -->
                {% endfor %}
-               <td><a href="delete_player/{{item.id}}" class="btn btn-default">Delete</a></td>
+               <td><a href="delete_player/{{player.playerID}}" class="btn btn-default">Delete</a></td>
             {% endfor %}
             </tr>
             {% endif %}

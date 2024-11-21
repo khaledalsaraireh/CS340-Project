@@ -9,13 +9,18 @@ import os
 # Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/app.py
 
 app = Flask(__name__)
-
+'''
 app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
 app.config['MYSQL_USER'] = 'cs340_palmerj2'
 app.config['MYSQL_PASSWORD'] = '0690' # last 4 of onid
 app.config['MYSQL_DB'] = 'cs340_palmerj2'
+app.config['MYSQL_CURSORCLASS'] = "DictCursor"'''
+mysql = MySQL(app) # commented out for now to test locally
+app.config['MYSQL_HOST'] ='localhost'
+app.config['MYSQL_USER'] ='root'
+app.config['MYSQL_PASSWORD'] = 'root'
+app.config['MYSQL_DB'] = '340testenv'
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
-mysql = MySQL(app)
 
 # ---------- Home Page Routes Start ----------
 @app.route("/")
@@ -57,21 +62,21 @@ def players():
 
 @app.route("/delete_player/<int:id>")
 def delete_player(id):
-    query = "DELETE from Players WHERE id = '%s';"
+    query = "DELETE from Players WHERE playerID = '%s';"
     cur = mysql.connection.cursor()
     cur.execute(query, (id,))
     mysql.connection.commit()
     return redirect("/players")
 
 
-@app.route("/update_player", methods =["POST"])
+@app.route("/update_player", methods =["GET", "POST"])
 def update_player():
-    playerId = request.form["playerId"]
+    playerId = request.form["playerID"]
     playerName = request.form["playerName"]
     nflTeam = request.form["nfl-team"]
     fantasyPoints = request.form["fantasyPoints"]
     position = request.form["position"]
-    query = "UPDATE Players SET Players.name = %s, Players.originTeamNFL = %s, Players.playerFantasyPoints = %s, Players.position = %s WHERE Players.id = %s"
+    query = "UPDATE Players SET Players.name = %s, Players.originTeamNFL = %s, Players.playerFantasyPoints = %s, Players.position = %s WHERE Players.playerID = %s"
     cur = mysql.connection.cursor()
     cur.execute(query, (playerName, nflTeam, fantasyPoints, position, playerId ))
     mysql.connection.commit()
