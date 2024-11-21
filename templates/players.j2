@@ -81,7 +81,7 @@
         </section>
         <section>
          <h2>Update Player</h2>
-         <form action="/players" method="POST">
+         <form action="/update_player" method="POST">
               <fieldset>
                   <label for="playerID">Player ID</label>
                   <input type="number" name="playerID" id="playerID" placeholder="Player ID" required>
@@ -135,7 +135,7 @@
                      <option value="DST">Defense/Special Teams</option>
                   </select>
               </fieldset>
-            <button>Submit Update</button>
+            <input type="submit" value="Submit Update" name="Submit_Update" class="btn btn-primary" style="margin:.5rem;">
           </form>
         </section>
         <section>
@@ -156,7 +156,7 @@
                {% for key in player.keys() %}
                <td> {{player[key]}}</td> <!-- Add attribute to column -->
                {% endfor %}
-               <td><a href="#">Delete</a></td>
+               <td><a href="delete_player/{{player.playerID}}" class="btn btn-default">Delete</a></td>
             {% endfor %}
             </tr>
             {% endif %}
