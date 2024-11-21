@@ -9,18 +9,20 @@ import os
 # Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/app.py
 
 app = Flask(__name__)
-'''
+
 app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
 app.config['MYSQL_USER'] = 'cs340_palmerj2'
 app.config['MYSQL_PASSWORD'] = '0690' # last 4 of onid
 app.config['MYSQL_DB'] = 'cs340_palmerj2'
-app.config['MYSQL_CURSORCLASS'] = "DictCursor"'''
-mysql = MySQL(app) # commented out for now to test locally
+app.config['MYSQL_CURSORCLASS'] = "DictCursor"
+mysql = MySQL(app) 
+'''
 app.config['MYSQL_HOST'] ='localhost'
 app.config['MYSQL_USER'] ='root'
 app.config['MYSQL_PASSWORD'] = 'root'
 app.config['MYSQL_DB'] = '340testenv'
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
+''' # localhost db info, commented out 
 
 # ---------- Home Page Routes Start ----------
 @app.route("/")
