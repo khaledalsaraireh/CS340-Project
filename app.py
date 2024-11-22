@@ -1,7 +1,6 @@
-from flask import Flask, render_template, redirect, json #type: ignore
+from flask import Flask, render_template, redirect       #type: ignore
 from flask_mysqldb import MySQL                          #type: ignore
 from flask import request                                #type: ignore
-import os
 
 # Citation for the following
 # Date: 11/17/24
@@ -110,7 +109,7 @@ def teams():
         query = """
         INSERT INTO Teams (teamName, wins, losses, teamFantasyPoints, teamOwnerID, leagueID)
         VALUES (
-            teamName = %s, 
+            %s, 
             %s, 
             %s, 
             %s, 
@@ -134,6 +133,8 @@ def delete_team(id):
 
     return redirect("/teams")
 # ---------- Team Routes End ----------
+
+
 
 # ---------- Team Owner Routes Start ----------
 @app.route("/team_owners", methods = ["GET", "POST"])
