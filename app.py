@@ -55,6 +55,34 @@ def players():
 
     return render_template("players.j2", player_data = player_data)
 
+@app.route("/delete_player/<int:id>")
+def delete_player(id):
+    query = "DELETE from Players WHERE playerID = '%s';"
+    cur = mysql.connection.cursor()
+    cur.execute(query, (id,))
+    mysql.connection.commit()
+    return redirect("/players")
+
+
+@app.route("/update_player", methods =["GET", "POST"])
+def update_player():
+    playerId = request.form["playerID"]
+    playerName = request.form["playerName"]
+    nflTeam = request.form["nfl-team"]
+    fantasyPoints = request.form["fantasyPoints"]
+    position = request.form["position"]
+    query = "UPDATE Players SET Players.name = %s, Players.originTeamNFL = %s, Players.playerFantasyPoints = %s, Players.position = %s WHERE Players.playerID = %s"
+    cur = mysql.connection.cursor()
+    cur.execute(query, (playerName, nflTeam, fantasyPoints, position, playerId ))
+    mysql.connection.commit()
+
+    return redirect("/players")
+
+    
+    
+
+
+
 # ---------- Players Routes End ----------
 if __name__ == "__main__":
     app.run(port=1122, debug=True)
