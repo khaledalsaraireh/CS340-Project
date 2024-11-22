@@ -7,6 +7,7 @@ from flask import request                                #type: ignore
 # Adapted from Flask Starter App Guide
 # Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/app.py
 
+
 app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
