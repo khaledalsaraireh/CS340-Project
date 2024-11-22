@@ -133,6 +133,32 @@ def delete_team(id):
     mysql.connection.commit()
 
     return redirect("/teams")
+
+@app.route("/update_team", methods =["GET", "POST"])
+def update_team():
+    teamName = request.form["name"]
+    wins = request.form["wins"]
+    losses = request.form["losses"]
+    fantasyPoints = request.form["teamFantasyPoints"]
+    owner = request.form["teamOwnerName"]
+    league = request.form["leagueName"]
+    teamID = request.form["teamID"]
+    query = """
+    UPDATE Teams
+    SET 
+        teamName = %s, 
+        wins = %s, 
+        losses = %s, 
+        teamFantasyPoints = %s, 
+        teamOwnerID = (SELECT teamOwnerID FROM TeamOwners WHERE userName = %s), 
+        leagueID = (SELECT leagueID FROM Leagues WHERE leagueName = %s)
+    WHERE teamID = %s
+    """
+    cur = mysql.connection.cursor()
+    cur.execute(query, (teamName, wins, losses, fantasyPoints, owner, league, teamID))
+    mysql.connection.commit()
+
+    return redirect("/teams")
 # ---------- Team Routes End ----------
 
 
