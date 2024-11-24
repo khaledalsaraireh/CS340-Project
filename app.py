@@ -84,6 +84,7 @@ def update_player():
     mysql.connection.commit()
 
     return redirect("/players")
+
 # ---------- Players Routes End ----------
 
 
