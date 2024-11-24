@@ -1,12 +1,12 @@
-from flask import Flask, render_template, redirect, json #type: ignore
+from flask import Flask, render_template, redirect       #type: ignore
 from flask_mysqldb import MySQL                          #type: ignore
 from flask import request                                #type: ignore
-import os
 
 # Citation for the following
 # Date: 11/17/24
 # Adapted from Flask Starter App Guide
 # Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/app.py
+
 
 app = Flask(__name__)
 
@@ -85,11 +85,90 @@ def update_player():
 
     return redirect("/players")
 
-    
-    
-
-
-
 # ---------- Players Routes End ----------
+
+
+
+# ---------- Team Routes Start ----------
+@app.route("/teams", methods = ["GET", "POST"])
+def teams():
+    if request.method == "GET":
+        query = "SELECT userName FROM TeamOwners"
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        team_owner_names = cur.fetchall()
+        query = "SELECT teamID, teamName, wins, losses, teamFantasyPoints, TeamOwners.userName, Leagues.leagueName FROM Teams LEFT JOIN TeamOwners ON Teams.teamOwnerID = TeamOwners.teamOwnerID LEFT JOIN Leagues ON Teams.leagueID = Leagues.leagueID;"
+        cur.execute(query)
+        teams_data = cur.fetchall()
+
+    if request.method == "POST":
+        teamName = request.form["name"]
+        wins = request.form["wins"]
+        losses = request.form["losses"]
+        fantasyPoints = request.form["teamFantasyPoints"]
+        owner = request.form["teamOwnerName"]
+        league = request.form["leagueName"]
+        query = """
+        INSERT INTO Teams (teamName, wins, losses, teamFantasyPoints, teamOwnerID, leagueID)
+        VALUES (
+            %s, 
+            %s, 
+            %s, 
+            %s, 
+            (SELECT teamOwnerID FROM TeamOwners WHERE userName = %s), 
+            (SELECT leagueID FROM Leagues WHERE leagueName = %s)
+        );
+        """
+        cur = mysql.connection.cursor()
+        cur.execute(query, (teamName, wins, losses, fantasyPoints, owner, league))
+        mysql.connection.commit()
+        return redirect("/teams")
+    
+    return render_template("teams.j2", team_owner_names=team_owner_names, teams_data = teams_data)
+
+@app.route("/delete_team/<int:id>")
+def delete_team(id):
+    query = "DELETE Teams FROM Teams WHERE teamID = '%s'"
+    cur = mysql.connection.cursor()
+    cur.execute(query, (id,))
+    mysql.connection.commit()
+
+    return redirect("/teams")
+
+@app.route("/update_team", methods =["GET", "POST"])
+def update_team():
+    teamName = request.form["name"]
+    wins = request.form["wins"]
+    losses = request.form["losses"]
+    fantasyPoints = request.form["teamFantasyPoints"]
+    owner = request.form["teamOwnerName"]
+    league = request.form["leagueName"]
+    teamID = request.form["teamID"]
+    query = """
+    UPDATE Teams
+    SET 
+        teamName = %s, 
+        wins = %s, 
+        losses = %s, 
+        teamFantasyPoints = %s, 
+        teamOwnerID = (SELECT teamOwnerID FROM TeamOwners WHERE userName = %s), 
+        leagueID = (SELECT leagueID FROM Leagues WHERE leagueName = %s)
+    WHERE teamID = %s
+    """
+    cur = mysql.connection.cursor()
+    cur.execute(query, (teamName, wins, losses, fantasyPoints, owner, league, teamID))
+    mysql.connection.commit()
+
+    return redirect("/teams")
+# ---------- Team Routes End ----------
+
+
+
+# ---------- Team Owner Routes Start ----------
+@app.route("/team_owners", methods = ["GET", "POST"])
+def team_owners():
+    return render_template("team_owners.j2")
+# ---------- Team Owner Routes End ----------
+
 if __name__ == "__main__":
     app.run(port=1122, debug=True)
