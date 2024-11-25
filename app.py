@@ -28,10 +28,6 @@ app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 @app.route("/")
 def home():
     return render_template("index.j2")
-
-@app.route("/index")
-def index():
-    return redirect("/")
 # ---------- Home Page Routes End ----------
 
 
@@ -71,7 +67,7 @@ def delete_player(id):
     return redirect("/players")
 
 
-@app.route("/update_player", methods =["GET", "POST"])
+@app.route("/update_player", methods =["POST"])
 def update_player():
     playerId = request.form["playerID"]
     playerName = request.form["playerName"]
@@ -134,7 +130,7 @@ def delete_team(id):
 
     return redirect("/teams")
 
-@app.route("/update_team", methods =["GET", "POST"])
+@app.route("/update_team", methods =["POST"])
 def update_team():
     teamName = request.form["name"]
     wins = request.form["wins"]
@@ -166,7 +162,55 @@ def update_team():
 # ---------- Team Owner Routes Start ----------
 @app.route("/team_owners", methods = ["GET", "POST"])
 def team_owners():
-    return render_template("team_owners.j2")
+    if request.method == "GET":
+        query = """
+        SELECT teamOwnerID, userName, email, dateOfBirth
+        FROM TeamOwners;
+        """
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        
+    if request.method == "POST":
+        name = request.form["userName"]
+        email = request.form["email"]
+        dob = request.form["dateOfBirth"]
+        query = """
+        INSERT INTO TeamOwners (userName, email, dateOfBirth)
+        VALUES (%s, %s, %s);
+        """
+        cur = mysql.connection.cursor()
+        cur.execute(query, (name, email, dob))
+        mysql.connection.commit()
+        return redirect("/team_owners")
+
+    return render_template("team_owners.j2", team_owners_data = data)
+
+
+@app.route("/delete_owner/<int:id>")
+def delete_team_owner(id):
+    query = "DELETE TeamOwners FROM TeamOwners WHERE teamOwnerID = %s"
+    cur = mysql.connection.cursor() 
+    cur.execute(query, (id, ))
+    mysql.connection.commit()
+    return redirect("/team_owners")
+
+
+@app.route("/update_team_owner", methods = ["POST"])
+def update_team_owner():
+    name = request.form["userName"]
+    email = request.form["email"]
+    dob = request.form["dateOfBirth"]
+    ownerID = request.form["teamOwnerID"]
+    query = """
+    UPDATE TeamOwners
+    SET userName = %s, email = %s, dateOfBirth = %s
+    WHERE teamOwnerID = %s;
+    """
+    cur = mysql.connection.cursor() 
+    cur.execute(query, (name, email, dob, ownerID))
+    mysql.connection.commit()
+    return redirect("/team_owners")
 # ---------- Team Owner Routes End ----------
 
 if __name__ == "__main__":
