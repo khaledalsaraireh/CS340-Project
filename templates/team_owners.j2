@@ -12,7 +12,7 @@
          <h1>Fantasy Football Manager</h1>
       </header>
       <nav>
-         <a href="index">Home</a>
+         <a href="/">Home</a>
          <a href="players">Players</a>
          <a href="teams">Teams</a>
          <a href="team_owners">Team Owners</a>
@@ -23,7 +23,7 @@
       <main>
          <section>
             <h2>Add Team Owner</h2>
-                <form action="" method="POST">
+                <form action="/team_owners" method="POST">
                      <fieldset>
                         <legend>Team Owner Info</legend>
                         <label for="name">User Name</label>
@@ -38,7 +38,7 @@
         </section>
         <section>
          <h2>Update Team Owner</h2>
-         <form action="" method="POST">
+         <form action="/update_team_owner" method="POST">
                <fieldset>
                   <legend>Team Owner Info</legend>
                   <label for="teamOwnerID">Team Owner ID</label>
@@ -63,27 +63,16 @@
                <th>Date Of Birth</th>
                <th>Delete</th>
             </thead>
+            {% if team_owners_data %}
+            {% for owner in team_owners_data%}
             <tr>
-               <th>1</th>
-               <td>John</td>
-               <td>john@john.com</td>
-               <td>NULL</td>
-               <td><a href="#">Delete</a></td>
+               {% for key in owner%}
+               <td>{{ owner[key] }}</td>
+               {% endfor %}
+               <td><a href="/delete_owner/{{owner.teamOwnerID}}">Delete</a></td>
+            {% endfor %}
             </tr>
-            <tr>
-               <th>2</th>
-               <td>ZiggyCat</td>
-               <td>Catnip423@gmail.com</td>
-               <td>2020-10-14</td>
-               <td><a href="#">Delete</a></td>
-           </tr>
-           <tr>
-               <th>3</th>
-               <td>User 3</td>
-               <td>email@aol.com</td>
-               <td>1993-3-30</td>
-               <td><a href="#">Delete</a></td>
-            </tr>
+            {% endif %}
         </table> 
       </section>
    </main>
