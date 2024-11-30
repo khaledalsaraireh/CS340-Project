@@ -214,5 +214,65 @@ def update_team_owner():
     return redirect("/team_owners")
 # ---------- Team Owner Routes End ----------
 
+
+# --------- League Routes Start -----------
+
+@app.route("/leagues", methods = ["GET", "POST"])
+def leagues():
+
+    if request.method == "POST":
+        leagueID = request.form["leagueid"]
+        leagueName = request.form["leaguename"]
+        isActive = request.form["active"]
+        query = """
+        INSERT INTO Leagues (leagueID, leagueName, isActive)
+        VALUES (%s, %s, %s);
+        """
+        cur = mysql.connection.cursor()
+        cur.execute(query, (name, email, dob))
+        mysql.connection.commit()
+        return redirect("/leagues")
+    
+
+
+
+    if request.method == "GET":
+        query = "SELECT leagueID, leagueName, isActive FROM Leagues"
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+
+    return render_template("leagues.j2", data=data)
+
+@app.route("edit_league<int:leagueID>", methods=["POST", "GET"])
+def edit_league(leagueID):
+    if request.method == "GET":
+        query = "SELECT * FROM Leagues WHERE leagueID = %s" % (leagueID)
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        return render_template("leagues.j2", data=data)
+    if request.method == "POST":
+        if request.form.get("Submit_Edits"):
+            leagueID = request.form["leagueID"]
+            leagueName = request.form["leaguename"]
+            isActive = request.form["active"]
+            query = "INSERT INTO Leagues (leagueID, leagueName, isActive) VALUES (%s,%s,%s)"
+            cur = mysql.connection.cursor()
+            cur.execute(query,(leagueID,leagueName,isActive))
+            mysql.connection.commit()
+        return redirect("/leagues")
+@app.route("delete_league<int:leagueID")
+def delete_league(leagueID)
+    query = "DELETE FROM Leagues WHERE leagueID = '%s';"
+    cur = mysql.connection.cursor()
+    cur.execute(query, (id,))
+    mysql.connection.commit() 
+    return redirect("/leagues")      
+    
+
+
+
+
 if __name__ == "__main__":
     app.run(port=1122, debug=True)
