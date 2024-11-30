@@ -9,20 +9,22 @@ from flask import request                                #type: ignore
 
 
 app = Flask(__name__)
-
+"""
 app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
 app.config['MYSQL_USER'] = 'cs340_palmerj2'
 app.config['MYSQL_PASSWORD'] = '0690' # last 4 of onid
 app.config['MYSQL_DB'] = 'cs340_palmerj2'
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
-mysql = MySQL(app) 
-'''
+"""
+
+
 app.config['MYSQL_HOST'] ='localhost'
 app.config['MYSQL_USER'] ='root'
 app.config['MYSQL_PASSWORD'] = 'root'
 app.config['MYSQL_DB'] = '340testenv'
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
-''' # localhost db info, commented out 
+mysql = MySQL(app) 
+''' # localhost db info, commented out '''
 
 # ---------- Home Page Routes Start ----------
 @app.route("/")
@@ -221,15 +223,15 @@ def update_team_owner():
 def leagues():
 
     if request.method == "POST":
-        leagueID = request.form["leagueid"]
+        
         leagueName = request.form["leaguename"]
         isActive = request.form["active"]
         query = """
-        INSERT INTO Leagues (leagueID, leagueName, isActive)
-        VALUES (%s, %s, %s);
+        INSERT INTO Leagues (leagueName, isActive)
+        VALUES (%s, %s);
         """
         cur = mysql.connection.cursor()
-        cur.execute(query, (name, email, dob))
+        cur.execute(query, (leagueName, isActive))
         mysql.connection.commit()
         return redirect("/leagues")
     
@@ -244,7 +246,7 @@ def leagues():
 
     return render_template("leagues.j2", data=data)
 
-@app.route("edit_league<int:leagueID>", methods=["POST", "GET"])
+@app.route("/edit_league/<int:leagueID>", methods=["POST", "GET"])
 def edit_league(leagueID):
     if request.method == "GET":
         query = "SELECT * FROM Leagues WHERE leagueID = %s" % (leagueID)
@@ -257,16 +259,19 @@ def edit_league(leagueID):
             leagueID = request.form["leagueID"]
             leagueName = request.form["leaguename"]
             isActive = request.form["active"]
-            query = "INSERT INTO Leagues (leagueID, leagueName, isActive) VALUES (%s,%s,%s)"
+            query = "UPDATE Leagues SET leagueName = %s, isActive = %s WHERE leagueID = %s"
             cur = mysql.connection.cursor()
-            cur.execute(query,(leagueID,leagueName,isActive))
+            cur.execute(query,(leagueName, isActive, leagueID))
             mysql.connection.commit()
+
+
+
         return redirect("/leagues")
-@app.route("delete_league<int:leagueID")
-def delete_league(leagueID)
-    query = "DELETE FROM Leagues WHERE leagueID = '%s';"
+@app.route("/delete_league/<int:leagueID>")
+def delete_league(leagueID):
+    query = "DELETE FROM Leagues WHERE leagueID = %s"
     cur = mysql.connection.cursor()
-    cur.execute(query, (id,))
+    cur.execute(query, (leagueID,))
     mysql.connection.commit() 
     return redirect("/leagues")      
     

@@ -8,37 +8,138 @@
       <link rel="stylesheet" href="styles.css">
       <meta>
 
+      
+   </head>
+   <body onload= "initPage()">
+      <header>
+         <h1>Fantasy Football Manager</h1>
+      </header>
+      <nav>
+         <a href="/">Home</a>
+         <a href="players">Players</a>
+         <a href="teams">Teams</a>
+         <a href="team_owners">Team Owners</a>
+         <a href="leagues">Leagues</a>
+         <a href="matches">Matches</a>
+         <a href="team_rosters">Players in Teams</a>
+      </nav>
+      <main>
+   
+
+<div id="edit">
+<h2>Update League Information:</h2>
+<form id="editLeague" action="/edit_league/{{data[0].leagueID}}" method="post">
+
+    <input type="hidden" name="leagueID" value="{{data[0].leagueID}}" id="LeagueID" required>
+   <label for="leaguename"><h3>League Name:</h3></label>
+   <input type="text" id="'leaguename" name="leaguename" placeholder="{{data[0].leagueName}}" required>
+   <br>
+   <br>
+   <br>
+   <h3>Is the league active?</h3>
+
+<input type="radio" id="yes" name="active" value="1" {% if data[0].isActive == 1 %}checked{% endif %}>
+<label for="yes">Yes</label><br>
+<input type="radio" id="no" name="active" value="0" {% if data[0].isActive == 0 %}checked{% endif %}>
+<label for="no">No</label><br>
+   <br>
+    <input type="submit" value="Submit Edits" name="Submit_Edits" class="btn btn-primary" style="margin:.5rem;">
+     </form>
+
+   </div>
+
+   <div id="insert">
+   
+   <h2> Add a League</h2>
+       <div>
+       <form id="insertLeague" action="/leagues" method="post">
+
+      <label for="leaguename"><h3>League Name:</h3></label>
+      <input type="text" id="leaguename" name="leaguename">
+      <br>
+      <br>
+      <br>
+      <h3>Is the league active?</h3>
+
+      <input type="radio" id="yes" name="active" value ="1">
+      <label for="yes">Yes</label><br>
+      <input type="radio" id="no"  name="active" value ="0">
+      <label for="no">No</label><br>
+      <br>
+      <input type="submit" value="Add League" id="Add_League" />
+        </form>
+      </div>
+
+     
+
+   </div>
+
+   <div id="browse" class="formstyle1">
+        
+       		<p><a href="#" onClick="newLeague()">Add New League</a> </p>
+
+
+   <h2>League Info</h2>
+      <table>
+      <thead>
+         <tr>
+            <th>League Id</th>
+            <th>League Name</th>
+            <th>League Active?</th>
+            <th>Edit</th>
+            <th>Delete</th>
+         </tr>
+         </thead>
+      <tr>
+      {% if data %}
+      {% for item in data %}
+      <tr>
+      {% for key in item.keys() %}
+      <td>{{item[key]}} </td>
+      {% endfor %}
+      <td><a href="#" onclick="updateLeague({{item.leagueID}})" class="btn btn-default">Edit</a></td>
+		<td><a href="/delete_league/{{item.leagueID}}" class="btn btn-default">Delete</a></td>
+      </tr> 
+      {% endfor %}
+      {% endif %}
+
+
+      </table>
+
+   </div>
+
+
+
+
+
+      </main>
+      <footer>
+         <p>&copy; 2024 </p>
+      </footer>
       <script language="JavaScript">
 	function showform(dowhat) {
 		/*
 		 * four DIVS: browse, insert, update, delete
 		 * this function sets one visible the others not
 		 */
-		if(dowhat == 'insert') {
-			document.getElementById('browse').style.display = 'none';
-			document.getElementById('insert').style.display = 'block';
-			document.getElementById('edit').style.display = 'none';
-			document.getElementById('delete').style.display = 'none';
-		} else if(dowhat == 'update') {
-			document.getElementById('browse').style.display = 'none';
-			document.getElementById('insert').style.display = 'none';
+		if(dowhat == 'update') {
+			document.getElementById('browse').style.display = 'none';			
 			document.getElementById('edit').style.display = 'block';
-			document.getElementById('delete').style.display = 'none';
-		} else if(dowhat == 'delete') {
-			document.getElementById('browse').style.display = 'none';
-			document.getElementById('insert').style.display = 'none';
+         document.getElementById('insert').style.display = 'none';
+				
+		
+		} 
+      else if(dowhat == 'insert'){
+         document.getElementById('browse').style.display = 'none';			
 			document.getElementById('edit').style.display = 'none';
-			document.getElementById('delete').style.display = 'block';
-		} else if(dowhat == 'all') {
-			document.getElementById('browse').style.display = 'block';
-			document.getElementById('insert').style.display = 'block';
-			document.getElementById('edit').style.display = 'block';
-			document.getElementById('delete').style.display = 'block';
-		} else { //by default display browse
-			document.getElementById('browse').style.display = 'block';
-			document.getElementById('insert').style.display = 'none';
+         document.getElementById('insert').style.display = 'block';
+
+      }
+      else { //by default display browse
+			document.getElementById('browse').style.display = 'block';			
 			document.getElementById('edit').style.display = 'none';
-			document.getElementById('delete').style.display = 'none';
+         document.getElementById('insert').style.display = 'none';
+			
 		}
 	}
 
@@ -55,112 +156,21 @@
 	}
 
 	function browseLeague() {
+      console.log('browseLeague() executed');
 		showform('browse');
 	}
 
 	function showAll() {
 		showform('all');
 	}
+   function initPage(){
+      console.log("Page Loaded");
+      browseLeague();
+   }
 	</script>
-   </head>
-   <body onload="browseLeague()">
-      <header>
-         <h1>Fantasy Football Manager</h1>
-      </header>
-      <nav>
-         <a href="/">Home</a>
-         <a href="players">Players</a>
-         <a href="teams">Teams</a>
-         <a href="team_owners">Team Owners</a>
-         <a href="leagues">Leagues</a>
-         <a href="matches">Matches</a>
-         <a href="team_rosters">Players in Teams</a>
-      </nav>
-      <main>
-   
-
-<div id="update" class="formstyle1">
-<h2>Update League Information:</h2>
-<form>
-
-    <input type="hidden" value={{data[0].leagueID}}" class="form-control" id="LeagueID" required>
-   <label for="leaguename"><h3>League Name:</h3></label>
-   <input type="text" id="'leaguename" name="leaguename" placeholder="{{data[0].leagueName}}" required>
-   <br>
-   <br>
-   <br>
-   <h3>Is the league active?</h3>
-
-   <input type="radio" name="active" value = "" disabled checked>
-   <input type="radio" id="yes" name="active" value ="1">
-   <label for="yes">Yes</label><br>
-   <input type="radio" id="no"  name="active" value ="0">
-   <label for="no">No</label><br>
-   <br>
-    <input type="submit" value="Submit Edits" onclick="browseLeague()" name="Submit_Edits" class="btn btn-primary" style="margin:.5rem;">
-     </form>
-
-   </div>
-
-   
-
-   <div id="browse">
-        
-       <h2> Add a League</h2>
-       <div class="formstyle1">
-       <form>
-
-      <label for="leaguename"><h3>League Name:</h3></label>
-      <input type="text" id="'leaguename" name="leaguename">
-      <br>
-      <br>
-      <br>
-      <h3>Is the league active?</h3>
-
-      <input type="radio" id="yes" name="active" value ="1">
-      <label for="yes">Yes</label><br>
-      <input type="radio" id="no"  name="active" value ="0">
-      <label for="no">No</label><br>
-      <br>
-      <input type="submit" value="Submit" />
-        </form>
-      </div>
-
-
-   <h2>League Info</h2>
-      <table>
-      <thead>
-         <tr>
-            <th>League Id</th>
-            <th>League Name</th>
-            <th>League Active?</th>
-            <th>Edit</th>
-            <th>Delete</th>
-         </tr>
-         </thead>
-      <tr>
-      {% for item in data %}
-      <tr>
-      {% for key in item.keys() %}
-      <td>{{item[key]}} </td>
-      {% endfor %}
-      <td><a href="edit_league/{{item.id}}" onclick="updateLeague()" class="btn btn-default">Edit</a></td>
-		<td><a href="delete_league/{{item.id}}" class="btn btn-default">Delete</a></td>
-      </table>
-
-   </div>
-
-
-
-
-
-      </main>
-      <footer>
-         <p>&copy; 2024 </p>
-      </footer>
    </body>
 
-   <style>
+   <!-- <style>
       nav {
       text-align: center;
       display: flex;
@@ -230,5 +240,5 @@ border: 2px solid;
          border: 2px solid black;
       }
 
-   </style>
+   </style> -->
 </html>
