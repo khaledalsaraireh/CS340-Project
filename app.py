@@ -36,23 +36,19 @@ def home():
 # ---------- Players Routes Start ----------
 @app.route("/players", methods=["POST", "GET"])
 def players():
-
+    cur = mysql.connection.cursor()
     if request.method == "POST":
         player_name = request.form["playerName"]
         nfl_team = request.form["nfl-team"]
         fantasy_points = request.form["fantasyPoints"]
         position = request.form["position"]
-
         query = "INSERT INTO Players (name, originTeamNFL, playerFantasyPoints, position) VALUES (%s, %s, %s, %s);"
-        cur = mysql.connection.cursor()
         cur.execute(query, (player_name, nfl_team, fantasy_points, position))
         mysql.connection.commit()
-        
         return redirect("/players")
     
     if request.method == "GET":
         query = "SELECT playerID, name, originTeamNFL, playerFantasyPoints, position FROM Players"
-        cur = mysql.connection.cursor()
         cur.execute(query)
         player_data = cur.fetchall()
 
@@ -87,15 +83,14 @@ def update_player():
 # ---------- Team Routes Start ----------
 @app.route("/teams", methods = ["GET", "POST"])
 def teams():
+    cur = mysql.connection.cursor()
     if request.method == "GET":
         query = "SELECT userName FROM TeamOwners"
-        cur = mysql.connection.cursor()
         cur.execute(query)
         team_owner_names = cur.fetchall()
         query = "SELECT teamID, teamName, wins, losses, teamFantasyPoints, TeamOwners.userName, Leagues.leagueName FROM Teams LEFT JOIN TeamOwners ON Teams.teamOwnerID = TeamOwners.teamOwnerID LEFT JOIN Leagues ON Teams.leagueID = Leagues.leagueID;"
         cur.execute(query)
         teams_data = cur.fetchall()
-
     if request.method == "POST":
         teamName = request.form["name"]
         wins = request.form["wins"]
@@ -114,7 +109,6 @@ def teams():
             (SELECT leagueID FROM Leagues WHERE leagueName = %s)
         );
         """
-        cur = mysql.connection.cursor()
         cur.execute(query, (teamName, wins, losses, fantasyPoints, owner, league))
         mysql.connection.commit()
         return redirect("/teams")
@@ -162,15 +156,15 @@ def update_team():
 # ---------- Team Owner Routes Start ----------
 @app.route("/team_owners", methods = ["GET", "POST"])
 def team_owners():
+    cur = mysql.connection.cursor()
     if request.method == "GET":
         query = """
         SELECT teamOwnerID, userName, email, dateOfBirth
         FROM TeamOwners;
         """
-        cur = mysql.connection.cursor()
+
         cur.execute(query)
         data = cur.fetchall()
-        
     if request.method == "POST":
         name = request.form["userName"]
         email = request.form["email"]
@@ -179,7 +173,6 @@ def team_owners():
         INSERT INTO TeamOwners (userName, email, dateOfBirth)
         VALUES (%s, %s, %s);
         """
-        cur = mysql.connection.cursor()
         cur.execute(query, (name, email, dob))
         mysql.connection.commit()
         return redirect("/team_owners")
@@ -212,6 +205,48 @@ def update_team_owner():
     mysql.connection.commit()
     return redirect("/team_owners")
 # ---------- Team Owner Routes End ----------
+
+# ---------- Players In Teams Routes Start ----------
+@app.route("/team_rosters", methods = ["POST", "GET"])
+def team_rosters():
+    cur = mysql.connection.cursor()
+    if request.method == "GET":
+        query = """
+        SELECT playerTeamStatusID, Teams.teamName, Players.name, playerActiveOnTeam
+        FROM PlayerHasTeam
+        JOIN Teams ON PlayerHasTeam.teamID = Teams.teamID
+        JOIN Players ON PlayerHasTeam.playerID = Players.playerID;
+        """
+        cur.execute(query)
+        data = cur.fetchall()
+        query = "SELECT name FROM Players"
+        cur.execute(query)
+        player_name_data = cur.fetchall()
+        query = "SELECT teamName from Teams"
+        cur.execute(query)
+        team_name_data = cur.fetchall()
+    if request.method == "POST":
+        playerName = request.form["playerName"]
+        teamName = request.form["teamName"]
+        status = request.form["isActive"]
+        query = """
+        INSERT INTO PlayerHasTeam(playerID, teamID, playerActiveOnTeam)
+        VALUES (
+            (SELECT playerID FROM Players WHERE name = %s), 
+            (SELECT teamID FROM Teams WHERE teamName = %s),
+            %s
+        )
+        """
+        cur.execute(query, (playerName, teamName, status))
+        mysql.connection.commit()
+        return redirect("/team_rosters")
+    return render_template("team_rosters.j2", 
+                           data = data, 
+                           player_name_data = player_name_data,
+                           team_name_data = team_name_data)
+
+
+# ---------- Players In Teams Routes End ----------
 
 if __name__ == "__main__":
     app.run(port=1122, debug=True)
