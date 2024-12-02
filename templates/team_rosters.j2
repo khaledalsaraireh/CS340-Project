@@ -28,15 +28,19 @@
                <legend>Team and Player Info</legend>
                <label for="playerName">Player Name</label>
                <select name="playerName" id="playerName">
-                  <option value="Dak Prescott">Dak Prescott</option>
-                  <option value="Justin Jefferson">Justin Jefferson</option>
-                  <option value="Derrick Henry">Derrick Henry</option>
+                  {% if player_name_data %}
+                  {% for player in player_name_data %}
+                  <option value="{{player.name}}">{{player.name}}</option>
+                  {% endfor %}
+                  {% endif %}
                </select>
-               <label for="leagueName">Team</label>
-               <select name="leagueName" id="leagueName">
-                  <option value="John's Team">John's Team</option>
-                  <option value="Football Cats">Football Cats</option>
-                  <option value="Team 3">Team 3</option>
+               <label for="teamName">Team</label>
+               <select name="teamName" id="teamName">
+                  {% if team_name_data %}
+                  {% for team in team_name_data %}
+                  <option value="{{team.teamName}}">{{team.teamName}}</option>
+                  {% endfor %}
+                  {% endif %}
                </select>
                <label for="isActive">Player Active on Team:</label>
                <select name="isActive" id="isActive">
@@ -56,15 +60,20 @@
                <input type="number" name="playerInTeamID" id="playerInTeamID" placeholder="Player In Team ID" required>
                <label for="playerName">Player Name</label>
                <select name="playerName" id="playerName">
-                  <option value="Dak Prescott">Dak Prescott</option>
-                  <option value="Justin Jefferson">Justin Jefferson</option>
-                  <option value="Derrick Henry">Derrick Henry</option>
+                  {% if player_name_data %}
+                  {% for player in player_name_data %}
+                  <option value="{{player}}">{{player.name}}</option>
+                  {% endfor %}
+                  {% endif %}
                </select>
                <label for="teamName">Team</label>
                <select name="teamName" id="teamName">
-                  <option value="John's Team">John's Team</option>
-                  <option value="Football Cats">Football Cats</option>
-                  <option value="Team 3">Team 3</option>
+                  {% if team_name_data %}
+                  {% for team in team_name_data %}
+                  <option value="{{team.teamName}}">{{team.teamName}}</option>
+                  {% endfor %}
+                  {% endif %}
+               </select>
                </select>
                <label for="playerStatus">Player Active on Team:</label>
                <select name="isActive" id="isActive">
@@ -83,27 +92,17 @@
                <th>Player Active On Team</th>
                <th>Delete</th>
             </thead>
-            <tr>
-               <th>1</th>
-               <th>Team 3</th>
-               <td>Dak Prescott</td>
-               <td>False</td>
-               <td><a href="#">Delete</a></td>
-            </tr>
-            <tr>
-               <th>2</th>
-               <th>John's Team</th>
-               <td>Derrick Henry</td>
-               <td>True</td>
-               <td><a href="#">Delete</a></td>
-            </tr>
-            <tr>
-               <th>3</th>
-               <th>Football Cats</th>
-               <td>Justin Jefferson</td>
-               <td>True</td>
-               <td><a href="#">Delete</a></td>
-            </tr>
+            {% if data %}
+            {% for entry in data %}
+               <tr>
+                  <td>{{entry.playerTeamStatusID}}</td>
+                  <td>{{entry.teamName}}</td>
+                  <td>{{entry.name}}</td>
+                  <td>{{"False" if not entry.playerActiveOnTeam else "True"}}</td>
+                  <td><a href="delete_playerInTeam/{{entry.playerTeamStatusID}}">Delete</a></td>
+               </tr>
+            {% endfor %}
+            {% endif %}
         </table>
       </main>
       <footer>
