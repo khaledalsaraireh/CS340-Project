@@ -16,13 +16,15 @@ app.config['MYSQL_PASSWORD'] = '0690' # last 4 of onid
 app.config['MYSQL_DB'] = 'cs340_palmerj2'
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 mysql = MySQL(app) 
-'''
+
+"""
 app.config['MYSQL_HOST'] ='localhost'
 app.config['MYSQL_USER'] ='root'
 app.config['MYSQL_PASSWORD'] = 'root'
 app.config['MYSQL_DB'] = '340testenv'
-app.config['MYSQL_CURSORCLASS'] = "DictCursor"
-''' # localhost db info, commented out 
+app.config['MYSQL_CURSORCLASS'] = "DictCursor" """
+
+''' # localhost db info, commented out '''
 
 # ---------- Home Page Routes Start ----------
 @app.route("/")
@@ -213,6 +215,125 @@ def update_team_owner():
     mysql.connection.commit()
     return redirect("/team_owners")
 # ---------- Team Owner Routes End ----------
+
+
+# --------- League Routes Start -----------
+
+@app.route("/leagues", methods = ["GET", "POST"])
+def leagues():
+
+    if request.method == "POST":
+        
+        leagueName = request.form["leaguename"]
+        isActive = request.form["active"]
+        query = """
+        INSERT INTO Leagues (leagueName, isActive)
+        VALUES (%s, %s);
+        """
+        cur = mysql.connection.cursor()
+        cur.execute(query, (leagueName, isActive))
+        mysql.connection.commit()
+        return redirect("/leagues")
+    
+
+
+
+    if request.method == "GET":
+        query = "SELECT leagueID, leagueName, isActive FROM Leagues"
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+
+    return render_template("leagues.j2", data=data)
+
+@app.route("/edit_league/<int:leagueID>", methods=["POST", "GET"])
+def edit_league(leagueID):
+    if request.method == "GET":
+        query = "SELECT * FROM Leagues WHERE leagueID = %s" % (leagueID)
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        return render_template("leagues.j2", data=data)
+    if request.method == "POST":
+        if request.form.get("Submit_Edits"):
+            leagueID = request.form["leagueID"]
+            leagueName = request.form["leaguename"]
+            isActive = request.form["active"]
+            query = "UPDATE Leagues SET leagueName = %s, isActive = %s WHERE leagueID = %s"
+            cur = mysql.connection.cursor()
+            cur.execute(query,(leagueName, isActive, leagueID))
+            mysql.connection.commit()
+
+
+
+        return redirect("/leagues")
+@app.route("/delete_league/<int:leagueID>")
+def delete_league(leagueID):
+    query = "DELETE FROM Leagues WHERE leagueID = %s"
+    cur = mysql.connection.cursor()
+    cur.execute(query, (leagueID,))
+    mysql.connection.commit() 
+    return redirect("/leagues")      
+    
+# ---------------- End League routes  -----------------------
+
+
+# --------------- Matches routes start------------------------
+
+
+@app.route("/matches", methods=["POST","GET"])
+def matches():
+    if request.method =="GET":
+        query = """SELECT m.matchID, m.weekPlayed, m.homeTeamScore, m.awayTeamScore, h.teamName, a.teamName 
+        FROM Matches as m
+        JOIN Teams as h 
+        ON h.teamID = m.homeTeamID
+        JOIN Teams as a
+        ON a.teamID = m.awayTeamID"""
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+
+        query2 = "SELECT teamID, teamName FROM Teams"
+        cur = mysql.connection.cursor()
+        cur.execute(query2)
+        teamData = cur.fetchall()
+
+    if request.method =="POST":
+        weekPlayed = request.form["week"]
+        homeTeamScore = request.form["hometeamscore"]
+        awayTeamScore = request.form["awayteamscore"]
+        homeTeamId = request.form["home"]
+        awayTeamId = request.form["away"]
+        query = """INSERT INTO Matches(weekPlayed, homeTeamScore, awayTeamScore, homeTeamID, awayTeamID)
+                VALUES(%s,%s,%s,%s,%s)"""
+        cur = mysql.connection.cursor()
+        cur.execute(query,(weekPlayed,homeTeamScore,awayTeamScore,homeTeamId,awayTeamId))
+        mysql.connection.commit()
+        return redirect("/matches")
+    
+    return render_template("matches.j2", data=data, teamData=teamData)
+@app.route("/delete_match/<int:matchID>")
+def delete_match(matchID):
+    query = "DELETE FROM Matches WHERE matchID = %s"
+    cur = mysql.connection.cursor()
+    cur.execute(query,(matchID,))
+    mysql.connection.commit()
+    return redirect("/matches")
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     app.run(port=1122, debug=True)
