@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+{# Citation for the following
+Date: 12/2/24
+Adapted from Flask Starter App Guide
+Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/app.py #}
 <html lang="en">
    <head>
       <meta charset="UTF-8">
@@ -23,11 +27,11 @@
       <main>
         <section>
          <h2>Add Player To Team</h2>
-         <form action="" method="POST">
+         <form action="/team_rosters" method="POST">
             <fieldset>
                <legend>Team and Player Info</legend>
                <label for="playerName">Player Name</label>
-               <select name="playerName" id="playerName">
+               <select name="playerName" id="playerName" required>
                   {% if player_name_data %}
                   {% for player in player_name_data %}
                   <option value="{{player.name}}">{{player.name}}</option>
@@ -35,7 +39,7 @@
                   {% endif %}
                </select>
                <label for="teamName">Team</label>
-               <select name="teamName" id="teamName">
+               <select name="teamName" id="teamName" required> 
                   {% if team_name_data %}
                   {% for team in team_name_data %}
                   <option value="{{team.teamName}}">{{team.teamName}}</option>
@@ -43,7 +47,7 @@
                   {% endif %}
                </select>
                <label for="isActive">Player Active on Team:</label>
-               <select name="isActive" id="isActive">
+               <select name="isActive" id="isActive" required>
                   <option value="1">True</option>
                   <option value="0">False</option>
                </select>
@@ -53,21 +57,21 @@
         </section>
         <section>
          <h2>Update Player Team Relationship</h2>
-         <form action="" method="POST">
+         <form action="/update_playerInTeam" method="POST">
             <fieldset>
                <legend>Team and Player Info</legend>
                <label for="teamID">Player In Team ID</label>
                <input type="number" name="playerInTeamID" id="playerInTeamID" placeholder="Player In Team ID" required>
                <label for="playerName">Player Name</label>
-               <select name="playerName" id="playerName">
+               <select name="playerName" id="playerName" required>
                   {% if player_name_data %}
                   {% for player in player_name_data %}
-                  <option value="{{player}}">{{player.name}}</option>
+                  <option value="{{player.name}}">{{player.name}}</option>
                   {% endfor %}
                   {% endif %}
                </select>
                <label for="teamName">Team</label>
-               <select name="teamName" id="teamName">
+               <select name="teamName" id="teamName" required>
                   {% if team_name_data %}
                   {% for team in team_name_data %}
                   <option value="{{team.teamName}}">{{team.teamName}}</option>
@@ -76,7 +80,7 @@
                </select>
                </select>
                <label for="playerStatus">Player Active on Team:</label>
-               <select name="isActive" id="isActive">
+               <select name="isActive" id="isActive" required>
                   <option value="1">True</option>
                   <option value="0">False</option>
                </select>

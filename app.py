@@ -312,14 +312,15 @@ def delete_match(matchID):
   
 # ---------- Players In Teams Routes Start ----------
 @app.route("/team_rosters", methods = ["POST", "GET"])
-def team_rosters():
+def playerInTeam():
     cur = mysql.connection.cursor()
     if request.method == "GET":
         query = """
         SELECT playerTeamStatusID, Teams.teamName, Players.name, playerActiveOnTeam
         FROM PlayerHasTeam
         JOIN Teams ON PlayerHasTeam.teamID = Teams.teamID
-        JOIN Players ON PlayerHasTeam.playerID = Players.playerID;
+        JOIN Players ON PlayerHasTeam.playerID = Players.playerID
+        ORDER BY playerTeamStatusID;
         """
         cur.execute(query)
         data = cur.fetchall()
@@ -349,6 +350,34 @@ def team_rosters():
                            player_name_data = player_name_data,
                            team_name_data = team_name_data)
 
+
+@app.route("/delete_playerInTeam/<int:id>")
+def delete_playerInTeam(id):
+    query = "DELETE PlayerHasTeam FROM PlayerHasTeam WHERE playerTeamStatusID = %s"
+    cur = mysql.connection.cursor()
+    cur.execute(query, (id,))
+    mysql.connection.commit() 
+    return redirect("/team_rosters")     
+
+
+@app.route("/update_playerInTeam", methods = ["POST"])
+def update_playerInTeam():
+    id = request.form["playerInTeamID"]
+    name = request.form["playerName"]
+    teamName = request.form["teamName"]
+    active = request.form["isActive"]
+    query = """
+    UPDATE PlayerHasTeam
+    SET 
+        playerID = (SELECT playerID FROM Players WHERE name = %s), 
+        teamID = (SELECT teamID FROM Teams WHERE teamName = %s), 
+        playerActiveOnTeam = %s
+    WHERE playerTeamStatusID = %s
+    """
+    cur = mysql.connection.cursor() 
+    cur.execute(query, (name, teamName, active, id))
+    mysql.connection.commit()
+    return redirect("/team_rosters")
 # ---------- Players In Teams Routes End ----------
        
 if __name__ == "__main__":
