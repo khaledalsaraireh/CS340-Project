@@ -48,12 +48,12 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
                     </select>
                     <label for="leagueName">League</label>
                     <select name="leagueName" id="leagueName">
+                    <option value="">None</option>
                     {% if league_names %}
                         {% for name in league_names%}
                         <option value="{{name.leagueName}}">{{name.leagueName}}</option>
                         {% endfor %}
-                    {% endif %}
-                        <option value="">None</option>
+                    {% endif %}  
                     </select>
                 </fieldset>
                 <button>Add Team</button>

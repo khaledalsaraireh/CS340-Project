@@ -184,7 +184,6 @@ def update_team(teamId):
         query = "SELECT leagueName FROM Leagues"
         cur.execute(query)
         league_names = cur.fetchall()
-        print(team_data)
         return render_template("update_team.j2", team_owner_names = team_owner_names, team_data = team_data, league_names = league_names)
    
 # ---------- Team Routes End ----------
