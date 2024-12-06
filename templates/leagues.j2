@@ -101,11 +101,7 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
       {% for key in item.keys() %}
       <td>{{item[key]}} </td>
       {% endfor %}
-<<<<<<< Updated upstream
-      <td><a href="#" onclick="updateLeague({{item.leagueID}})" class="btn btn-default">Edit</a></td>
-=======
       <td><a href="/edit_league/{{item.leagueID}}" onclick="updateLeague()" class="btn btn-default">Edit</a></td>
->>>>>>> Stashed changes
 		<td><a href="/delete_league/{{item.leagueID}}" class="btn btn-default">Delete</a></td>
       </tr> 
       {% endfor %}

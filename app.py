@@ -290,7 +290,7 @@ def edit_league(leagueID):
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
-        return render_template("leagues.j2", data=data)
+        return render_template("edit_leagues.j2", data=data)
     if request.method == "POST":
         if request.form.get("Submit_Edits"):
             leagueID = request.form["leagueID"]
