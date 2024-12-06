@@ -40,6 +40,18 @@ def home():
 @app.route("/players", methods=["POST", "GET"])
 def players():
     cur = mysql.connection.cursor()
+    if request.method == "GET":
+        query = "SELECT playerID, name, originTeamNFL, playerFantasyPoints, position FROM Players"
+        cur.execute(query)
+        player_data = cur.fetchall()
+
+    return render_template("players.j2", player_data = player_data)
+
+@app.route("/add_player", methods=["POST", "GET"])
+def add_player():
+    cur = mysql.connection.cursor()
+    if request.method == "GET":
+        return render_template("add_player.j2")
     if request.method == "POST":
         player_name = request.form["playerName"]
         nfl_team = request.form["nfl-team"]
@@ -49,13 +61,6 @@ def players():
         cur.execute(query, (player_name, nfl_team, fantasy_points, position))
         mysql.connection.commit()
         return redirect("/players")
-    
-    if request.method == "GET":
-        query = "SELECT playerID, name, originTeamNFL, playerFantasyPoints, position FROM Players"
-        cur.execute(query)
-        player_data = cur.fetchall()
-
-    return render_template("players.j2", player_data = player_data)
 
 @app.route("/delete_player/<int:id>")
 def delete_player(id):
@@ -66,18 +71,22 @@ def delete_player(id):
     return redirect("/players")
 
 
-@app.route("/update_player", methods =["POST"])
-def update_player():
-    playerId = request.form["playerID"]
-    playerName = request.form["playerName"]
-    nflTeam = request.form["nfl-team"]
-    fantasyPoints = request.form["fantasyPoints"]
-    position = request.form["position"]
-    query = "UPDATE Players SET Players.name = %s, Players.originTeamNFL = %s, Players.playerFantasyPoints = %s, Players.position = %s WHERE Players.playerID = %s"
+@app.route("/update_player/<int:playerId>", methods =["POST", "GET"])
+def update_player(playerId):
     cur = mysql.connection.cursor()
-    cur.execute(query, (playerName, nflTeam, fantasyPoints, position, playerId ))
-    mysql.connection.commit()
-
+    if request.method == "POST":
+        playerName = request.form["playerName"]
+        nflTeam = request.form["nfl-team"]
+        fantasyPoints = request.form["fantasyPoints"]
+        position = request.form["position"]
+        query = "UPDATE Players SET Players.name = %s, Players.originTeamNFL = %s, Players.playerFantasyPoints = %s, Players.position = %s WHERE Players.playerID = %s"
+        cur.execute(query, (playerName, nflTeam, fantasyPoints, position, playerId ))
+        mysql.connection.commit()
+    if request.method == "GET":
+        query = "SELECT playerID, name, originTeamNFL, playerFantasyPoints, position FROM Players WHERE playerID = %s"
+        cur.execute(query, (playerId,))
+        player_data = cur.fetchall()
+        return render_template("update_player.j2", player_data=player_data)
     return redirect("/players")
 
 # ---------- Players Routes End ----------
@@ -95,6 +104,28 @@ def teams():
         query = "SELECT teamID, teamName, wins, losses, teamFantasyPoints, TeamOwners.userName, Leagues.leagueName FROM Teams LEFT JOIN TeamOwners ON Teams.teamOwnerID = TeamOwners.teamOwnerID LEFT JOIN Leagues ON Teams.leagueID = Leagues.leagueID;"
         cur.execute(query)
         teams_data = cur.fetchall()
+    
+    return render_template("teams.j2", team_owner_names=team_owner_names, teams_data = teams_data)
+
+@app.route("/delete_team/<int:id>")
+def delete_team(id):
+    query = "DELETE Teams FROM Teams WHERE teamID = '%s'"
+    cur = mysql.connection.cursor()
+    cur.execute(query, (id,))
+    mysql.connection.commit()
+    return redirect("/teams")
+
+@app.route("/add_team", methods=["GET","POST"])
+def add_team():
+    cur = mysql.connection.cursor()
+    if request.method == "GET":
+        query = "SELECT userName FROM TeamOwners"
+        cur.execute(query)
+        team_owner_names = cur.fetchall()
+        query = "SELECT leagueName FROM Leagues"
+        cur.execute(query)
+        league_names = cur.fetchall()
+        return render_template("add_team.j2", team_owner_names=team_owner_names, league_names = league_names)
     if request.method == "POST":
         teamName = request.form["name"]
         wins = request.form["wins"]
@@ -116,43 +147,46 @@ def teams():
         cur.execute(query, (teamName, wins, losses, fantasyPoints, owner, league))
         mysql.connection.commit()
         return redirect("/teams")
-    
-    return render_template("teams.j2", team_owner_names=team_owner_names, teams_data = teams_data)
 
-@app.route("/delete_team/<int:id>")
-def delete_team(id):
-    query = "DELETE Teams FROM Teams WHERE teamID = '%s'"
+@app.route("/update_team/<int:teamId>", methods =["POST", "GET"])
+def update_team(teamId):
     cur = mysql.connection.cursor()
-    cur.execute(query, (id,))
-    mysql.connection.commit()
-
-    return redirect("/teams")
-
-@app.route("/update_team", methods =["POST"])
-def update_team():
-    teamName = request.form["name"]
-    wins = request.form["wins"]
-    losses = request.form["losses"]
-    fantasyPoints = request.form["teamFantasyPoints"]
-    owner = request.form["teamOwnerName"]
-    league = request.form["leagueName"]
-    teamID = request.form["teamID"]
-    query = """
-    UPDATE Teams
-    SET 
-        teamName = %s, 
-        wins = %s, 
-        losses = %s, 
-        teamFantasyPoints = %s, 
-        teamOwnerID = (SELECT teamOwnerID FROM TeamOwners WHERE userName = %s), 
-        leagueID = (SELECT leagueID FROM Leagues WHERE leagueName = %s)
-    WHERE teamID = %s
-    """
-    cur = mysql.connection.cursor()
-    cur.execute(query, (teamName, wins, losses, fantasyPoints, owner, league, teamID))
-    mysql.connection.commit()
-
-    return redirect("/teams")
+    if request.method == "POST":
+        teamName = request.form["name"]
+        wins = request.form["wins"]
+        losses = request.form["losses"]
+        fantasyPoints = request.form["teamFantasyPoints"]
+        owner = request.form["teamOwnerName"]
+        league = request.form["leagueName"]
+        query = """
+        UPDATE Teams
+        SET 
+            teamName = %s, 
+            wins = %s, 
+            losses = %s, 
+            teamFantasyPoints = %s, 
+            teamOwnerID = (SELECT teamOwnerID FROM TeamOwners WHERE userName = %s), 
+            leagueID = (SELECT leagueID FROM Leagues WHERE leagueName = %s)
+        WHERE teamID = %s
+        """
+        cur.execute(query, (teamName, wins, losses, fantasyPoints, owner, league, teamId))
+        mysql.connection.commit()
+        return redirect("/teams")
+    if request.method == "GET":
+        query = "SELECT userName FROM TeamOwners"
+        cur.execute(query)
+        team_owner_names = cur.fetchall()
+        query = """SELECT teamID, teamName, wins, losses, teamFantasyPoints, TeamOwners.userName, Leagues.leagueName 
+        FROM Teams LEFT JOIN TeamOwners ON Teams.teamOwnerID = TeamOwners.teamOwnerID 
+        LEFT JOIN Leagues ON Teams.leagueID = Leagues.leagueID
+        WHERE teamID = %s"""
+        cur.execute(query, (teamId,))
+        team_data = cur.fetchall()
+        query = "SELECT leagueName FROM Leagues"
+        cur.execute(query)
+        league_names = cur.fetchall()
+        return render_template("update_team.j2", team_owner_names = team_owner_names, team_data = team_data, league_names = league_names)
+   
 # ---------- Team Routes End ----------
 
 
@@ -166,7 +200,6 @@ def team_owners():
         SELECT teamOwnerID, userName, email, dateOfBirth
         FROM TeamOwners;
         """
-
         cur.execute(query)
         data = cur.fetchall()
     if request.method == "POST":

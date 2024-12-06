@@ -26,93 +26,38 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
       </nav>
       <main>
          <section>
-            <h2>Add Team</h2>
-                <form action="" method="POST">
-                    <fieldset>
-                        <legend>Team Info</legend>
-                        <label for="name">Team Name</label>
-                        <input type="name" name="name" id="name" placeholder="Team Name" required>
-                        <label for="wins">Wins</label>
-                        <input type="number" name="wins" id="wins" placeholder="0">
-                        <label for="losses">Losses</label>
-                        <input type="number" name="losses" id="losses" placeholder="0">
-                        <label for="teamFantasyPoints">Team Fantasy Points</label>
-                        <input type="number" name="teamFantasyPoints" id="teamFantasyPoints" placeholder="0">
-                        <label for="teamOwnerName">Team Owner</label>
-                        <select name="teamOwnerName" id="teamOwnerName">
-                        {% if team_owner_names %} 
-                           {% for userName in team_owner_names%}
-                              <option value="{{userName['userName']}}">{{userName['userName']}}</option>
-                           {% endfor %}
-                        {% endif %}
-                        </select>
-                        <label for="leagueName">League</label>
-                        <select name="leagueName" id="leagueName">
-                           <option value="2024 League">2024 League</option>
-                           <option value="2023 League">2023 League</option>
-                           <option value="">None</option>
-                        </select>
-                    </fieldset>
-                    <button>Add Team</button>
-                </form>
-        </section>
-        <section>
-         <h2>Update Team</h2>
-         <form action="/update_team" method="POST">
-            <fieldset>
-               <legend>Team Info</legend>
-               <label for="teamID">Team ID</label>
-               <input type="number" name="teamID" id="teamID" placeholder="Team ID" required>
-               <label for="name">Team Name</label>
-               <input type="name" name="name" id="name" placeholder="Team Name" required>
-               <label for="wins">Wins</label>
-               <input type="number" name="wins" id="wins" placeholder="0">
-               <label for="losses">Losses</label>
-               <input type="number" name="losses" id="losses" placeholder="0">
-               <label for="teamFantasyPoints">Team Fantasy Points</label>
-               <input type="number" name="teamFantasyPoints" id="teamFantasyPoints" placeholder="0">
-               <label for="teamOwnerName">Team Owner</label>
-               <select name="teamOwnerName" id="teamOwnerName">
-               {% if team_owner_names %} 
-                  {% for userName in team_owner_names%}
-                     <option value="{{userName['userName']}}">{{userName['userName']}}</option>
-                  {% endfor %}
+            <h2>Add New Team</h2>
+            <form action="/add_team" method="GET">
+               <button>Add Team</button>
+            </form>
+         <section>
+         <section>
+            <h1 style="font-size:1.5em">Teams Data</h1>
+            <table>
+               <thead>
+                  <th>Team ID</th>
+                  <th>Name</th>
+                  <th>Wins</th>
+                  <th>Losses</th>
+                  <th>Team Fantasy Points</th>
+                  <th>Team Owner</th>
+                  <th>League</th>
+                  <th>Edit</th>
+                  <th>Delete</th>
+               </thead>
+               {% if teams_data %}
+               {% for team in teams_data%} 
+                  <tr>
+                     {% for key in team.keys()%}
+                     <td> {{team[key]}}</td>
+                     {% endfor %}
+                     <td><a href="update_team/{{team.teamID}}">Edit</a></td>
+                     <td><a href="delete_team/{{team.teamID}}">Delete</a></td>
+               {% endfor %}
+                  </tr>
                {% endif %}
-               </select>
-               <label for="leagueName">League</label>
-               <select name="leagueName" id="leagueName">
-                  <option value="2024 League">2024 League</option>
-                  <option value="2023 League">2023 League</option>
-                  <option value="">None</option>
-               </select>
-            </fieldset>
-            <button>Submit Update</button>
-          </form>
+            </table>
         </section>
-        <section>
-         <h1>Teams Data</h1>
-         <table>
-            <thead>
-               <th>Team ID</th>
-               <th>Name</th>
-               <th>Wins</th>
-               <th>Losses</th>
-               <th>Team Fantasy Points</th>
-               <th>Team Owner</th>
-               <th>League</th>
-               <th>Delete</th>
-            </thead>
-            {% if teams_data %}
-            {% for team in teams_data%} 
-               <tr>
-                  {% for key in team.keys()%}
-                  <td> {{team[key]}}</td>
-                  {% endfor %}
-                  <td><a href="delete_team/{{team.teamID}}">Delete</a></td>
-            {% endfor %}
-               </tr>
-            {% endif %}
-        </table>
       </main>
       <footer>
          <p>&copy; 2024 </p>
