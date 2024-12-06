@@ -14,15 +14,16 @@ app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
 app.config['MYSQL_USER'] = 'cs340_palmerj2'
 app.config['MYSQL_PASSWORD'] = '0690' # last 4 of onid
 app.config['MYSQL_DB'] = 'cs340_palmerj2'
-app.config['MYSQL_CURSORCLASS'] = "DictCursor"
-mysql = MySQL(app) 
+app.config['MYSQL_CURSORCLASS'] = "DictCursor" 
 
-"""
-app.config['MYSQL_HOST'] ='localhost'
+
+'''app.config['MYSQL_HOST'] ='localhost'
 app.config['MYSQL_USER'] ='root'
 app.config['MYSQL_PASSWORD'] = 'root'
 app.config['MYSQL_DB'] = '340testenv'
-app.config['MYSQL_CURSORCLASS'] = "DictCursor" """
+app.config['MYSQL_CURSORCLASS'] = "DictCursor" '''
+mysql = MySQL(app) 
+
 
 ''' # localhost db info, commented out '''
 
@@ -244,7 +245,7 @@ def edit_league(leagueID):
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
-        return render_template("leagues.j2", data=data)
+        return render_template("edit_leagues.j2", data=data)
     if request.method == "POST":
         if request.form.get("Submit_Edits"):
             leagueID = request.form["leagueID"]
