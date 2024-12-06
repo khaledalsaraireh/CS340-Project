@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{# Citation for the following
+Date: 12/2/24
+Adapted from Flask Starter App Guide
+Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/app.py #}
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Fantasy Football Manager</title>
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+      <meta>
+   </head>
+   <body>
+      <header>
+         <h1>Fantasy Football Manager</h1>
+      </header>
+      <nav>
+         <a href="/">Home</a>
+         <a href="/players">Players</a>
+         <a href="/teams">Teams</a>
+         <a href="/team_owners">Team Owners</a>
+         <a href="/leagues">Leagues</a>
+         <a href="/matches">Matches</a>
+         <a href="/team_rosters">Players in Teams</a>
+      </nav>
+      <main>
+        <section>
+            <h2>Update Team Owner</h2>
+            <form action="/update_owner/{{data[0].teamOwnerID}}" method="POST">
+            <fieldset>
+                <legend>Team Owner Info</legend>
+                <label for="name">User Name</label>
+                <input type="text" name="userName" id="userName" value="{{data[0].userName}}" required>
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" value="{{data[0].email}}" required>
+                <label for="dateOfBirth">Date of Birth</label>
+                <input type="date" name="dateOfBirth" id="dateOfBirth" value="{{data[0].dateOfBirth}}">
+            </fieldset>
+            <button>Submit Update</button>
+            </form>
+        </section>
+   </main>
+   <footer>
+      <p>&copy; 2024 </p>
+   </footer>
+   </body>
+</html>
