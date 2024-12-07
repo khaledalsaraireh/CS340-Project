@@ -14,15 +14,16 @@ app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
 app.config['MYSQL_USER'] = 'cs340_palmerj2'
 app.config['MYSQL_PASSWORD'] = '0690' # last 4 of onid
 app.config['MYSQL_DB'] = 'cs340_palmerj2'
-app.config['MYSQL_CURSORCLASS'] = "DictCursor"
-mysql = MySQL(app) 
+app.config['MYSQL_CURSORCLASS'] = "DictCursor" 
 
-"""
-app.config['MYSQL_HOST'] ='localhost'
+
+'''app.config['MYSQL_HOST'] ='localhost'
 app.config['MYSQL_USER'] ='root'
 app.config['MYSQL_PASSWORD'] = 'root'
 app.config['MYSQL_DB'] = '340testenv'
-app.config['MYSQL_CURSORCLASS'] = "DictCursor" """
+app.config['MYSQL_CURSORCLASS'] = "DictCursor" '''
+mysql = MySQL(app) 
+
 
 ''' # localhost db info, commented out '''
 
