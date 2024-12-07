@@ -8,8 +8,7 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Fantasy Football Manager</title>
-      <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-      <link rel="stylesheet" href="styles.css">
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
       <meta>
    </head>
    <body onload="initPage()">
@@ -207,78 +206,4 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
    }
 	</script>
    </body>
-
-   <style>
-      nav {
-      text-align: center;
-      display: flex;
-      margin: 5px auto;
-      justify-content: center;
-      flex-wrap: wrap;
-      }
-
-      nav a {
-         border-radius: 5px;
-         color: var(--foggyGray);
-         font-size: 1.1em;
-         font-weight: bold;
-         margin-right: 20px;
-         padding: 5px 20px;
-         text-decoration: none;
-      }
-
-      h1 {
-         text-align: center;
-         font-weight: 700;
-      }
-      h2
-      {
-        text-align: center;
-        
-      }
-
-      nav a:hover {
-         color: navy
-      }
-
-      footer {
-         line-height: 5px;
-         font-size: larger;
-         text-align: center;
-         padding: 5px;
-         margin: 0 auto;
-      }
-
-      .formstyle1
-      {
-        width: 500px;
-        clear: both;
-        margin: auto;
-        padding: 10px 10px;
-        border: 2px black solid;
-        
-      }
-       .formstyle1 input {
-        width: 100%;
-        clear: both;
-      
-       }
-       .tablestyle1 table
-       {
-        width: 100%;
-        border: 2px solid;
-       }
-       .tablestyle1 th
-       {
-        height: 70px;
-         text-align: center;
-         border: 2px solid black;
-       }
-       .tablestyle1 td
-       {
-        text-align: center;
-         border: 1px solid;
-       }
-       
-   </style>
 </html>
