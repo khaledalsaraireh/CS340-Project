@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{# Citation for the following
+Date: 12/2/24
+Adapted from Flask Starter App Guide
+Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/app.py #}
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Fantasy Football Manager</title>
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+      <meta>
+   </head>
+   <body>
+      <header>
+         <h1>Fantasy Football Manager</h1>
+      </header>
+      <nav>
+         <a href="/">Home</a>
+         <a href="/players">Players</a>
+         <a href="/teams">Teams</a>
+         <a href="/team_owners">Team Owners</a>
+         <a href="/leagues">Leagues</a>
+         <a href="/matches">Matches</a>
+         <a href="/team_rosters">Players in Teams</a>
+      </nav>
+      <main>
+        <section>
+         <h2>Add Player To Team</h2>
+         <form action="/add_roster" method="POST">
+            <fieldset>
+               <legend>Team and Player Info</legend>
+               <label for="playerName">Player Name</label>
+               <select name="playerName" id="playerName" required>
+                  {% if player_name_data %}
+                  {% for player in player_name_data %}
+                  <option value="{{player.name}}">{{player.name}}</option>
+                  {% endfor %}
+                  {% endif %}
+               </select>
+               <label for="teamName">Team</label>
+               <select name="teamName" id="teamName" required> 
+                  {% if team_name_data %}
+                  {% for team in team_name_data %}
+                  <option value="{{team.teamName}}">{{team.teamName}}</option>
+                  {% endfor %}
+                  {% endif %}
+               </select>
+               <label for="isActive">Player Active on Team:</label>
+               <select name="isActive" id="isActive" required>
+                  <option value="1">True</option>
+                  <option value="0">False</option>
+               </select>
+            </fieldset>
+            <button>Add Player To Team</button>
+          </form>
+        </section>
+      </main>
+      <footer>
+         <p>&copy; 2024 </p>
+      </footer>
+   </body>
+</html>

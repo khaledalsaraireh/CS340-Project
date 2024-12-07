@@ -25,37 +25,22 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
          <a href="team_rosters">Players in Teams</a>
       </nav>
       <main>
-         <section>
-            <h2>Add New Team Owner</h2>
-            <form action="/add_team_owner" method="GET">
-               <button>Add Team Owner</button>
-            </form>
-        </section>
         <section>
-         <h1>Team Owners Data</h1>
-         <table>
-            <thead>
-               <th>Team Owner ID</th>
-               <th>User Name</th>
-               <th>Email</th>
-               <th>Date Of Birth</th>
-               <th>Edit</th>
-               <th>Delete</th>
-            </thead>
-            {% if team_owners_data %}
-            {% for owner in team_owners_data%}
-            <tr>
-               {% for key in owner%}
-               <td>{{ owner[key] }}</td>
-               {% endfor %}
-               <td><a href="/update_owner/{{owner.teamOwnerID}}">Edit</a></td>
-               <td><a href="/delete_owner/{{owner.teamOwnerID}}">Delete</a></td>
-            {% endfor %}
-            </tr>
-            {% endif %}
-        </table> 
-      </section>
-   </main>
+            <h2>Add Team Owner</h2>
+                <form action="/add_team_owner" method="POST">
+                    <fieldset>
+                        <legend>Team Owner Info</legend>
+                        <label for="name">User Name</label>
+                        <input type="text" name="userName" id="userName" placeholder="User Name" required>
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" placeholder="Email" required>
+                        <label for="dateOfBirth">Date of Birth</label>
+                        <input type="date" name="dateOfBirth" id="dateOfBirth">
+                    </fieldset>
+                    <button>Add Team Owner</button>
+                </form>
+        </section>
+        </main>
    <footer>
       <p>&copy; 2024 </p>
    </footer>

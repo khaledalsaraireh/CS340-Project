@@ -202,6 +202,13 @@ def team_owners():
         """
         cur.execute(query)
         data = cur.fetchall()
+    return render_template("team_owners.j2", team_owners_data = data)
+
+@app.route("/add_team_owner", methods=["GET", "POST"])
+def add_team_owner():
+    cur = mysql.connection.cursor()
+    if request.method == "GET":
+        return render_template("add_team_owner.j2")
     if request.method == "POST":
         name = request.form["userName"]
         email = request.form["email"]
@@ -213,32 +220,38 @@ def team_owners():
         cur.execute(query, (name, email, dob))
         mysql.connection.commit()
         return redirect("/team_owners")
-
-    return render_template("team_owners.j2", team_owners_data = data)
-
+    
+@app.route("/update_owner/<int:id>", methods=["GET","POST"])
+def update_team_owner(id):
+    cur = mysql.connection.cursor()
+    if request.method == "GET":
+        query = """
+        SELECT teamOwnerID, userName, email, dateOfBirth
+        FROM TeamOwners
+        WHERE teamOwnerID = %s;
+        """
+        cur.execute(query, (id, ))
+        data = cur.fetchall()
+        return render_template("update_team_owner.j2", data=data)
+    if request.method == "POST":
+        name = request.form["userName"]
+        email = request.form["email"]
+        dob = request.form["dateOfBirth"]
+        query = """
+        UPDATE TeamOwners
+        SET userName = %s, email = %s, dateOfBirth = %s
+        WHERE teamOwnerID = %s;
+        """
+        cur = mysql.connection.cursor() 
+        cur.execute(query, (name, email, dob, id))
+        mysql.connection.commit()
+        return redirect("/team_owners")
 
 @app.route("/delete_owner/<int:id>")
 def delete_team_owner(id):
     query = "DELETE TeamOwners FROM TeamOwners WHERE teamOwnerID = %s"
     cur = mysql.connection.cursor() 
     cur.execute(query, (id, ))
-    mysql.connection.commit()
-    return redirect("/team_owners")
-
-
-@app.route("/update_team_owner", methods = ["POST"])
-def update_team_owner():
-    name = request.form["userName"]
-    email = request.form["email"]
-    dob = request.form["dateOfBirth"]
-    ownerID = request.form["teamOwnerID"]
-    query = """
-    UPDATE TeamOwners
-    SET userName = %s, email = %s, dateOfBirth = %s
-    WHERE teamOwnerID = %s;
-    """
-    cur = mysql.connection.cursor() 
-    cur.execute(query, (name, email, dob, ownerID))
     mysql.connection.commit()
     return redirect("/team_owners")
 # ---------- Team Owner Routes End ----------
@@ -364,6 +377,25 @@ def playerInTeam():
         query = "SELECT teamName from Teams"
         cur.execute(query)
         team_name_data = cur.fetchall()
+    return render_template("team_rosters.j2", 
+                           data = data, 
+                           player_name_data = player_name_data,
+                           team_name_data = team_name_data)
+
+
+@app.route("/add_roster", methods=["GET", "POST"])
+def add_roster():
+    cur = mysql.connection.cursor()
+    if request.method == "GET":
+        query = "SELECT name FROM Players"
+        cur.execute(query)
+        player_name_data = cur.fetchall()
+        query = "SELECT teamName from Teams"
+        cur.execute(query)
+        team_name_data = cur.fetchall()
+        return render_template("add_roster.j2",
+                           player_name_data = player_name_data,
+                           team_name_data = team_name_data)
     if request.method == "POST":
         playerName = request.form["playerName"]
         teamName = request.form["teamName"]
@@ -379,11 +411,7 @@ def playerInTeam():
         cur.execute(query, (playerName, teamName, status))
         mysql.connection.commit()
         return redirect("/team_rosters")
-    return render_template("team_rosters.j2", 
-                           data = data, 
-                           player_name_data = player_name_data,
-                           team_name_data = team_name_data)
-
+    
 
 @app.route("/delete_playerInTeam/<int:id>")
 def delete_playerInTeam(id):
@@ -394,24 +422,44 @@ def delete_playerInTeam(id):
     return redirect("/team_rosters")     
 
 
-@app.route("/update_playerInTeam", methods = ["POST"])
-def update_playerInTeam():
-    id = request.form["playerInTeamID"]
-    name = request.form["playerName"]
-    teamName = request.form["teamName"]
-    active = request.form["isActive"]
-    query = """
-    UPDATE PlayerHasTeam
-    SET 
-        playerID = (SELECT playerID FROM Players WHERE name = %s), 
-        teamID = (SELECT teamID FROM Teams WHERE teamName = %s), 
-        playerActiveOnTeam = %s
-    WHERE playerTeamStatusID = %s
-    """
+@app.route("/update_roster/<int:id>", methods = ["GET","POST"])
+def update_roster(id):
     cur = mysql.connection.cursor() 
-    cur.execute(query, (name, teamName, active, id))
-    mysql.connection.commit()
-    return redirect("/team_rosters")
+    if request.method == "GET":
+        query = """
+        SELECT playerTeamStatusID, Teams.teamName, Players.name, playerActiveOnTeam
+        FROM PlayerHasTeam
+        JOIN Teams ON PlayerHasTeam.teamID = Teams.teamID
+        JOIN Players ON PlayerHasTeam.playerID = Players.playerID
+        WHERE playerTeamStatusID = %s;
+        """
+        cur.execute(query, (id,))
+        data = cur.fetchall()
+        query = "SELECT name FROM Players"
+        cur.execute(query)
+        player_name_data = cur.fetchall()
+        query = "SELECT teamName from Teams"
+        cur.execute(query)
+        team_name_data = cur.fetchall()
+        return render_template("update_roster.j2", 
+                           data = data, 
+                           player_name_data = player_name_data,
+                           team_name_data = team_name_data)
+    if request.method == "POST":
+        name = request.form["playerName"]
+        teamName = request.form["teamName"]
+        active = request.form["isActive"]
+        query = """
+        UPDATE PlayerHasTeam
+        SET 
+            playerID = (SELECT playerID FROM Players WHERE name = %s), 
+            teamID = (SELECT teamID FROM Teams WHERE teamName = %s), 
+            playerActiveOnTeam = %s
+        WHERE playerTeamStatusID = %s
+        """
+        cur.execute(query, (name, teamName, active, id))
+        mysql.connection.commit()
+        return redirect("/team_rosters")
 # ---------- Players In Teams Routes End ----------
        
 if __name__ == "__main__":
