@@ -52,7 +52,7 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
                   <option value="0">False</option>
                </select>
             </fieldset>
-            <button>Add Player To Team</button>
+            <button class="addnew">Add Player To Team</button>
           </form>
         </section>
         <section>
@@ -85,7 +85,7 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
                   <option value="0">False</option>
                </select>
             </fieldset>
-            <button>Update Relationship</button>
+            <button class="addnew">Update Relationship</button>
           </form>
           <h1>Players in Teams Data</h1>
          <table>
@@ -103,7 +103,7 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
                   <td>{{entry.teamName}}</td>
                   <td>{{entry.name}}</td>
                   <td>{{"False" if not entry.playerActiveOnTeam else "True"}}</td>
-                  <td><a href="delete_playerInTeam/{{entry.playerTeamStatusID}}">Delete</a></td>
+                  <td><a href="delete_playerInTeam/{{entry.playerTeamStatusID}}" class="btn btn-default">Delete</a></td>
                </tr>
             {% endfor %}
             {% endif %}
