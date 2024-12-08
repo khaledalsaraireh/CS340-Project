@@ -26,36 +26,12 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
       </nav>
       <main>
          <section>
-            <h2>Add Team Owner</h2>
-                <form action="/team_owners" method="POST">
-                     <fieldset>
-                        <legend>Team Owner Info</legend>
-                        <label for="name">User Name</label>
-                        <input type="text" name="userName" id="userName" placeholder="User Name" required>
-                        <label for="email">Email</label>
-                        <input type="email" name="email" id="email" placeholder="Email" required>
-                        <label for="dateOfBirth">Date of Birth</label>
-                        <input type="date" name="dateOfBirth" id="dateOfBirth">
-                     </fieldset>
-                  <button class="addnew">Add Team Owner</button>
-                </form>
-        </section>
-        <section>
-         <h2>Update Team Owner</h2>
-         <form action="/update_team_owner" method="POST">
-               <fieldset>
-                  <legend>Team Owner Info</legend>
-                  <label for="teamOwnerID">Team Owner ID</label>
-                  <input type="number" name="teamOwnerID" id="teamOwnerID" placeholder="Team Owner ID" required>
-                  <label for="name">User Name</label>
-                  <input type="text" name="userName" id="userName" placeholder="User Name" required>
-                  <label for="email">Email</label>
-                  <input type="email" name="email" id="email" placeholder="Email" required>
-                  <label for="dateOfBirth">Date of Birth</label>
-                  <input type="date" name="dateOfBirth" id="dateOfBirth">
-               </fieldset>
-            <button class="addnew">Submit Update</button>
-          </form>
+
+            <h2>Add New Team Owner</h2>
+            <form action="/add_team_owner" method="GET">
+               <button>Add Team Owner</button>
+            </form>
+
         </section>
         <section>
          <h1>Team Owners Data</h1>
@@ -65,6 +41,7 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
                <th>User Name</th>
                <th>Email</th>
                <th>Date Of Birth</th>
+               <th>Edit</th>
                <th>Delete</th>
             </thead>
             {% if team_owners_data %}
@@ -73,7 +50,10 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
                {% for key in owner%}
                <td>{{ owner[key] }}</td>
                {% endfor %}
+
+               <td><a href="/update_owner/{{owner.teamOwnerID}}" class="btn btn-default">Edit</a></td>
                <td><a href="/delete_owner/{{owner.teamOwnerID}}" class="btn btn-default">Delete</a></td>
+
             {% endfor %}
             </tr>
             {% endif %}
