@@ -335,16 +335,17 @@ def matches():
         teamData = cur.fetchall()
 
     if request.method =="POST":
-        weekPlayed = request.form["week"]
-        homeTeamScore = request.form["hometeamscore"]
-        awayTeamScore = request.form["awayteamscore"]
-        homeTeamId = request.form["home"]
-        awayTeamId = request.form["away"]
-        query = """INSERT INTO Matches(weekPlayed, homeTeamScore, awayTeamScore, homeTeamID, awayTeamID)
+        if request.form.get("Edit_Match"):
+            weekPlayed = request.form["week"]
+            homeTeamScore = request.form["hometeamscore"]
+            awayTeamScore = request.form["awayteamscore"]
+            homeTeamId = request.form["home"]
+            awayTeamId = request.form["away"]
+            query = """INSERT INTO Matches(weekPlayed, homeTeamScore, awayTeamScore, homeTeamID, awayTeamID)
                 VALUES(%s,%s,%s,%s,%s)"""
-        cur = mysql.connection.cursor()
-        cur.execute(query,(weekPlayed,homeTeamScore,awayTeamScore,homeTeamId,awayTeamId))
-        mysql.connection.commit()
+            cur = mysql.connection.cursor()
+            cur.execute(query,(weekPlayed,homeTeamScore,awayTeamScore,homeTeamId,awayTeamId))
+            mysql.connection.commit()
         return redirect("/matches")
     
     return render_template("matches.j2", data=data, teamData=teamData)
@@ -375,8 +376,7 @@ def edit_match(matchID):
         homeTeamId = request.form["home"]
         awayTeamId = request.form["away"]
         matchId = request.form["matchid"]
-        query = """UPDATE Matches SET weekPlayed =%s, homeTeamScore = %s, awayTeamScore = %s, homeTeamID = %s, awayTeamID = %s WHERE matchID = %s"
-                VALUES(%s,%s,%s,%s,%s,%s)"""
+        query = """UPDATE Matches SET weekPlayed = %s, homeTeamScore = %s, awayTeamScore = %s, homeTeamID = %s, awayTeamID = %s WHERE matchID = %s"""
         cur = mysql.connection.cursor()
         cur.execute(query,(weekPlayed,homeTeamScore,awayTeamScore,homeTeamId,awayTeamId,matchId))
         mysql.connection.commit()
