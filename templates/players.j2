@@ -26,9 +26,9 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
       </nav>
       <main>
          <section>
-            <h2>Add New Player</h2>
+           
                 <form action="/add_player" method="GET">
-                  <button>Add Player</button>
+                  <button class="addnew">Add Player</button>
                 </form>
         </section>
         <section>
@@ -49,8 +49,8 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
                {% for key in player.keys() %}
                <td> {{player[key]}}</td> <!-- Add attribute to column -->
                {% endfor %}
-               <td><a href="update_player/{{player.playerID}}">Edit</a></td>
-               <td><a href="delete_player/{{player.playerID}}">Delete</a></td>
+               <td><a href="update_player/{{player.playerID}}" class="btn btn-default">Edit</a></td>
+               <td><a href="delete_player/{{player.playerID}}" class="btn btn-default">Delete</a></td>
             {% endfor %}
             </tr>
             {% endif %}

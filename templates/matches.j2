@@ -49,7 +49,7 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
                 
                 
                 </select> <br>
-                <label for="away">Away Team</label>
+                <label for="away">Away Team</label><br>
                 <select id="away" name="away" required>
                 {% for item in teamData %}
                 <option value="{{ item['teamID'] }}">{{item["teamName"]}}</option>
@@ -136,7 +136,7 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
       {% for key in item.keys() %}
       <td>{{item[key]}} </td>
       {% endfor %}
-      <td><a href="#" onclick="updateMatch({{item.matchID}})" class="btn btn-default">Edit</a></td>
+      <td><a href="/edit_match/{{item.matchID}}" class="btn btn-default">Edit</a></td>
 		<td><a href="/delete_match/{{item.matchID}}" class="btn btn-default">Delete</a></td>
       </tr> 
       {% endfor %}
@@ -206,4 +206,5 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
    }
 	</script>
    </body>
+
 </html>

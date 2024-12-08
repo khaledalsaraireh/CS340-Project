@@ -26,10 +26,12 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
       </nav>
       <main>
          <section>
+
             <h2>Add New Team Owner</h2>
             <form action="/add_team_owner" method="GET">
                <button>Add Team Owner</button>
             </form>
+
         </section>
         <section>
          <h1>Team Owners Data</h1>
@@ -48,8 +50,10 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
                {% for key in owner%}
                <td>{{ owner[key] }}</td>
                {% endfor %}
-               <td><a href="/update_owner/{{owner.teamOwnerID}}">Edit</a></td>
-               <td><a href="/delete_owner/{{owner.teamOwnerID}}">Delete</a></td>
+
+               <td><a href="/update_owner/{{owner.teamOwnerID}}" class="btn btn-default">Edit</a></td>
+               <td><a href="/delete_owner/{{owner.teamOwnerID}}" class="btn btn-default">Delete</a></td>
+
             {% endfor %}
             </tr>
             {% endif %}

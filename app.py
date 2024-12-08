@@ -355,6 +355,35 @@ def delete_match(matchID):
     cur.execute(query,(matchID,))
     mysql.connection.commit()
     return redirect("/matches")
+@app.route("/edit_match/<int:matchID>", methods=["POST", "GET"])
+def edit_match(matchID):
+    if request.method =="GET":
+        query = "SELECT * FROM Matches WHERE MatchID = %s" % (matchID)
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        
+        query2 = "SELECT teamID, teamName FROM Teams"
+        cur = mysql.connection.cursor()
+        cur.execute(query2)
+        teamData = cur.fetchall()
+        return render_template("edit_matches.j2", data=data, teamData=teamData)
+    if request.method =="POST":
+        weekPlayed = request.form["week"]
+        homeTeamScore = request.form["hometeamscore"]
+        awayTeamScore = request.form["awayteamscore"]
+        homeTeamId = request.form["home"]
+        awayTeamId = request.form["away"]
+        matchId = request.form["matchid"]
+        query = """UPDATE Matches SET weekPlayed =%s, homeTeamScore = %s, awayTeamScore = %s, homeTeamID = %s, awayTeamID = %s WHERE matchID = %s"
+                VALUES(%s,%s,%s,%s,%s,%s)"""
+        cur = mysql.connection.cursor()
+        cur.execute(query,(weekPlayed,homeTeamScore,awayTeamScore,homeTeamId,awayTeamId,matchId))
+        mysql.connection.commit()
+    return redirect("/matches")
+    
+    
+
 # --------------- Matches routes End------------------------
   
 # ---------- Players In Teams Routes Start ----------
