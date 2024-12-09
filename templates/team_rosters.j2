@@ -26,15 +26,12 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
       </nav>
       <main>
         <section>
-
-        
          <form action="/add_roster" method="GET">
             <button class="addnew">Add Player To Team</button>
           </form>
         </section>
         <section>
-         <h1>Players in Teams Data</h1>
-
+         <h2>Players in Teams Data</h2>
          <table>
             <thead>
                <th>Player In Team ID</th>
@@ -51,10 +48,8 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
                   <td>{{entry.teamName}}</td>
                   <td>{{entry.name}}</td>
                   <td>{{"False" if not entry.playerActiveOnTeam else "True"}}</td>
-
                   <td><a href="update_roster/{{entry.playerTeamStatusID}}" class="btn btn-default">Edit</a></td>
                   <td><a href="delete_playerInTeam/{{entry.playerTeamStatusID}}" class="btn btn-default">Delete</a></td>
-
                </tr>
             {% endfor %}
             {% endif %}
