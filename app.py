@@ -20,8 +20,6 @@ app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 mysql = MySQL(app) 
 
 
-''' # localhost db info, commented out '''
-
 # ---------- Home Page Routes Start ----------
 @app.route("/")
 def home():
@@ -82,7 +80,6 @@ def update_player(playerId):
         player_data = cur.fetchall()
         return render_template("update_player.j2", player_data=player_data)
     return redirect("/players")
-
 # ---------- Players Routes End ----------
 
 
