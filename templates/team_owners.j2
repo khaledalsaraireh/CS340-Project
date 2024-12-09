@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-{# Citation for the following
+{# Citation for the following:
+Jinja expression iterating through passed in data based on starter app guide
 Date: 12/2/24
 Adapted from Flask Starter App Guide
 Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/app.py #}
@@ -26,12 +27,9 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
       </nav>
       <main>
          <section>
-
-            
             <form action="/add_team_owner" method="GET">
                <button class="addnew">Add Team Owner</button>
             </form>
-
         </section>
         <section>
          <h1>Team Owners Data</h1>
@@ -50,10 +48,8 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
                {% for key in owner%}
                <td>{{ owner[key] }}</td>
                {% endfor %}
-
                <td><a href="/update_owner/{{owner.teamOwnerID}}" class="btn btn-default">Edit</a></td>
                <td><a href="/delete_owner/{{owner.teamOwnerID}}" class="btn btn-default">Delete</a></td>
-
             {% endfor %}
             </tr>
             {% endif %}

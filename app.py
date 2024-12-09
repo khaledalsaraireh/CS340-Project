@@ -1,8 +1,10 @@
-from flask import Flask, render_template, redirect       #type: ignore
-from flask_mysqldb import MySQL                          #type: ignore
-from flask import request                                #type: ignore
+from flask import Flask, render_template, redirect, request      # type: ignore
+from flask_mysqldb import MySQL                                  # type: ignore
 
-# Citation for the following
+
+# Citation for the following:
+# DB connection creation copied and adapted from the Flask Starter app guide
+# Database interactions (e.g. establishing cursor, executing query, committing, etc.) also adapted from starter app guide
 # Date: 11/17/24
 # Adapted from Flask Starter App Guide
 # Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/app.py
@@ -10,17 +12,10 @@ from flask import request                                #type: ignore
 
 app = Flask(__name__)
 
-'''app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
-app.config['MYSQL_USER'] = 'cs340_palmerj2'
-app.config['MYSQL_PASSWORD'] = '0690' # last 4 of onid
-app.config['MYSQL_DB'] = 'cs340_palmerj2'
-app.config['MYSQL_CURSORCLASS'] = "DictCursor" '''
-
-
-app.config['MYSQL_HOST'] ='localhost'
-app.config['MYSQL_USER'] ='root'
-app.config['MYSQL_PASSWORD'] = 'root'
-app.config['MYSQL_DB'] = '340testenv'
+app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
+app.config['MYSQL_USER'] = ''
+app.config['MYSQL_PASSWORD'] = '' # last 4 of onid
+app.config['MYSQL_DB'] = ''
 app.config['MYSQL_CURSORCLASS'] = "DictCursor" 
 mysql = MySQL(app) 
 
@@ -69,7 +64,6 @@ def delete_player(id):
     cur.execute(query, (id,))
     mysql.connection.commit()
     return redirect("/players")
-
 
 @app.route("/update_player/<int:playerId>", methods =["POST", "GET"])
 def update_player(playerId):
@@ -126,6 +120,7 @@ def add_team():
         cur.execute(query)
         league_names = cur.fetchall()
         return render_template("add_team.j2", team_owner_names=team_owner_names, league_names = league_names)
+    
     if request.method == "POST":
         teamName = request.form["name"]
         wins = request.form["wins"]
@@ -172,6 +167,7 @@ def update_team(teamId):
         cur.execute(query, (teamName, wins, losses, fantasyPoints, owner, league, teamId))
         mysql.connection.commit()
         return redirect("/teams")
+    
     if request.method == "GET":
         query = "SELECT userName FROM TeamOwners"
         cur.execute(query)
@@ -186,7 +182,6 @@ def update_team(teamId):
         cur.execute(query)
         league_names = cur.fetchall()
         return render_template("update_team.j2", team_owner_names = team_owner_names, team_data = team_data, league_names = league_names)
-   
 # ---------- Team Routes End ----------
 
 
@@ -261,7 +256,6 @@ def delete_team_owner(id):
 def leagues():
 
     if request.method == "POST":
-        
         leagueName = request.form["leaguename"]
         isActive = request.form["active"]
         query = """
@@ -272,9 +266,6 @@ def leagues():
         cur.execute(query, (leagueName, isActive))
         mysql.connection.commit()
         return redirect("/leagues")
-    
-
-
 
     if request.method == "GET":
         query = "SELECT leagueID, leagueName, isActive FROM Leagues"
@@ -292,6 +283,7 @@ def edit_league(leagueID):
         cur.execute(query)
         data = cur.fetchall()
         return render_template("edit_leagues.j2", data=data)
+    
     if request.method == "POST":
         if request.form.get("Submit_Edits"):
             leagueID = request.form["leagueID"]
@@ -301,10 +293,8 @@ def edit_league(leagueID):
             cur = mysql.connection.cursor()
             cur.execute(query,(leagueName, isActive, leagueID))
             mysql.connection.commit()
-
-
-
         return redirect("/leagues")
+    
 @app.route("/delete_league/<int:leagueID>")
 def delete_league(leagueID):
     query = "DELETE FROM Leagues WHERE leagueID = %s"
@@ -324,7 +314,8 @@ def matches():
         JOIN Teams as h 
         ON h.teamID = m.homeTeamID
         JOIN Teams as a
-        ON a.teamID = m.awayTeamID"""
+        ON a.teamID = m.awayTeamID
+        ORDER BY m.matchID"""
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -335,20 +326,20 @@ def matches():
         teamData = cur.fetchall()
 
     if request.method =="POST":
-        if request.form.get("Edit_Match"):
-            weekPlayed = request.form["week"]
-            homeTeamScore = request.form["hometeamscore"]
-            awayTeamScore = request.form["awayteamscore"]
-            homeTeamId = request.form["home"]
-            awayTeamId = request.form["away"]
-            query = """INSERT INTO Matches(weekPlayed, homeTeamScore, awayTeamScore, homeTeamID, awayTeamID)
-                VALUES(%s,%s,%s,%s,%s)"""
-            cur = mysql.connection.cursor()
-            cur.execute(query,(weekPlayed,homeTeamScore,awayTeamScore,homeTeamId,awayTeamId))
-            mysql.connection.commit()
+        weekPlayed = request.form["week"]
+        homeTeamScore = request.form["hometeamscore"]
+        awayTeamScore = request.form["awayteamscore"]
+        homeTeamId = request.form["home"]
+        awayTeamId = request.form["away"]
+        query = """INSERT INTO Matches(weekPlayed, homeTeamScore, awayTeamScore, homeTeamID, awayTeamID)
+            VALUES(%s,%s,%s,%s,%s)"""
+        cur = mysql.connection.cursor()
+        cur.execute(query,(weekPlayed,homeTeamScore,awayTeamScore,homeTeamId,awayTeamId))
+        mysql.connection.commit()
         return redirect("/matches")
     
     return render_template("matches.j2", data=data, teamData=teamData)
+
 @app.route("/delete_match/<int:matchID>")
 def delete_match(matchID):
     query = "DELETE FROM Matches WHERE matchID = %s"
@@ -356,6 +347,7 @@ def delete_match(matchID):
     cur.execute(query,(matchID,))
     mysql.connection.commit()
     return redirect("/matches")
+
 @app.route("/edit_match/<int:matchID>", methods=["POST", "GET"])
 def edit_match(matchID):
     if request.method =="GET":
@@ -369,6 +361,7 @@ def edit_match(matchID):
         cur.execute(query2)
         teamData = cur.fetchall()
         return render_template("edit_matches.j2", data=data, teamData=teamData)
+    
     if request.method =="POST":
         weekPlayed = request.form["week"]
         homeTeamScore = request.form["hometeamscore"]
@@ -380,10 +373,8 @@ def edit_match(matchID):
         cur = mysql.connection.cursor()
         cur.execute(query,(weekPlayed,homeTeamScore,awayTeamScore,homeTeamId,awayTeamId,matchId))
         mysql.connection.commit()
-    return redirect("/matches")
-    
-    
 
+    return redirect("/matches")
 # --------------- Matches routes End------------------------
   
 # ---------- Players In Teams Routes Start ----------
@@ -441,7 +432,6 @@ def add_roster():
         mysql.connection.commit()
         return redirect("/team_rosters")
     
-
 @app.route("/delete_playerInTeam/<int:id>")
 def delete_playerInTeam(id):
     query = "DELETE PlayerHasTeam FROM PlayerHasTeam WHERE playerTeamStatusID = %s"
@@ -449,7 +439,6 @@ def delete_playerInTeam(id):
     cur.execute(query, (id,))
     mysql.connection.commit() 
     return redirect("/team_rosters")     
-
 
 @app.route("/update_roster/<int:id>", methods = ["GET","POST"])
 def update_roster(id):

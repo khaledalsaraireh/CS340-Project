@@ -10,8 +10,6 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
       <title>Fantasy Football Manager</title>
       <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
       <meta>
-
-      
    </head>
       </head>
    <body>
@@ -31,42 +29,27 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
       <div id="edit">
 <h2>Update Match Information:</h2>
 <form id="editMatch" action="/edit_match/{{data[0].matchID}}" method="post">
-
-                 <input type="hidden" name="matchid" value="{{data[0].matchID}}" id="matchid" required>
-                <label for="week">Week Played:</label>
-                <input type="text" id="week" name="week"><br>
-                <label for="hometeamscore">Home Team Score:</label>
-                <input type="text" id="hometeamscore" name="hometeamscore"><br>
-                <label for="awayteamscore">Away Team Score:</label>
-                <input type="text" id="awayteamscore" name="awayteamscore"><br>
-                <label for="home">Home Team</label>
-                <br>
-                <select id="home" name="home" required>
-                {% for item in teamData %}
-                <option value="{{ item['teamID'] }}">{{item["teamName"]}}</option>
-                {% endfor %}
-                
-                
-                </select> <br>
-                <label for="away">Away Team</label><br>
-                <select id="away" name="away" required>
-                {% for item in teamData %}
-                <option value="{{ item['teamID'] }}">{{item["teamName"]}}</option>
-                {% endfor %}</select><br>
-
-                <input type="submit" value="Edit Match" name="Edit_Match" class="btn btn-primary" style="margin:.5rem;">
-
-
-            </form>
-
+   <input type="hidden" name="matchid" value="{{data[0].matchID}}" id="matchid" required>
+   <label for="week">Week Played:</label>
+   <input type="text" id="week" name="week"><br>
+   <label for="hometeamscore">Home Team Score:</label>
+   <input type="text" id="hometeamscore" name="hometeamscore"><br>
+   <label for="awayteamscore">Away Team Score:</label>
+   <input type="text" id="awayteamscore" name="awayteamscore"><br>
+   <label for="home">Home Team</label>
+   <br>
+   <select id="home" name="home" required>
+   {% for item in teamData %}
+   <option value="{{ item['teamID'] }}">{{item["teamName"]}}</option>
+   {% endfor %}
+   </select> <br>
+   <label for="away">Away Team</label><br>
+   <select id="away" name="away" required>
+   {% for item in teamData %}
+   <option value="{{ item['teamID'] }}">{{item["teamName"]}}</option>
+   {% endfor %}</select><br>
+   <input type="submit" value="Edit Match" name="Edit_Match" class="btn btn-primary" style="margin:.5rem;">
+</form>
    </div>
-
-   
-
-     
-
-   
    </body>
-
-   
 </html>

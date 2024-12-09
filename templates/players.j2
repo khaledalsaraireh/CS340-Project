@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-{# Citation for the following
+{# Citation for the following:
+Jinja expression iterating through passed in data based on starter app guide
 Date: 12/2/24
 Adapted from Flask Starter App Guide
 Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/bsg_people_app/app.py #}
@@ -26,10 +27,9 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
       </nav>
       <main>
          <section>
-           
-                <form action="/add_player" method="GET">
-                  <button class="addnew">Add Player</button>
-                </form>
+            <form action="/add_player" method="GET">
+             <button class="addnew">Add Player</button>
+            </form>
         </section>
         <section>
          <h2>Players Data</h2>
@@ -43,11 +43,11 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
                <th>Edit</th>
                <th>Delete</th>
             </thead>
-            {% if player_data %} <!-- Check if data is available -->
-            {% for player in player_data %} <!-- Loop through each player and add row -->
+            {% if player_data %}
+            {% for player in player_data %} 
             <tr>
                {% for key in player.keys() %}
-               <td> {{player[key]}}</td> <!-- Add attribute to column -->
+               <td> {{player[key]}}</td> 
                {% endfor %}
                <td><a href="update_player/{{player.playerID}}" class="btn btn-default">Edit</a></td>
                <td><a href="delete_player/{{player.playerID}}" class="btn btn-default">Delete</a></td>
