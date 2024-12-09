@@ -30,8 +30,9 @@ Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/blob/master/b
       <main>
       <div id="edit">
 <h2>Update Match Information:</h2>
-<form id="insertMatch" action="/matches" method="post">
-                
+<form id="editMatch" action="/edit_match/{{data[0].matchID}}" method="post">
+
+                 <input type="hidden" name="matchid" value="{{data[0].matchID}}" id="matchid" required>
                 <label for="week">Week Played:</label>
                 <input type="text" id="week" name="week"><br>
                 <label for="hometeamscore">Home Team Score:</label>
